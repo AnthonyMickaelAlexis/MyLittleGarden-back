@@ -2,6 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
+const mainController = require('../controllers/mainController');
+
+router.get('/home', mainController.homePage);
+
 /*
 const parcelController = require('./controllers/parcelController');
 const userController = require('./controllers/userController');
@@ -34,3 +38,5 @@ router.delete(‘home/profil/:user/delete’, userController.deleteUser);
 
 DELETE /home/profil/:user/parcel/delete page de suppression de plants de la parcelle du membre
 router.delete(‘home/profil/:user/parcel/delete’, parcelController.deleteParcel); */
+
+module.exports = router;
