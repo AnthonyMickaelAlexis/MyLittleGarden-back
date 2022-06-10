@@ -1,13 +1,19 @@
+
+require('dotenv').config()
+
+
 const express = require("express");
 
 // We get express-session to manage user sessions
-const session = require("express-session");
+// const session = require("express-session");
+// const initLocals = require('./app/middlewares/initLocals');
 
-require('dotenv').config()
 
 const router = require('./app/router/index');
 
 const app = express();
+
+// app.use(initLocals);
 
 app.use(router);
 
