@@ -9,7 +9,7 @@ const parcelController = require('../controllers/parcelController');
 // const cropsController = require('../controllers/cropsController');
 
 router.get('/home', mainController.homePage);
-
+router.get('/', mainController.getAllUsers);
 // connexion page
 router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
@@ -27,6 +27,5 @@ router.delete('', userController.deleteUser);
 router.get('home/profil/:user/parcel', parcelController.getUserParcel);
 router.patch('home/profil/:user/parcel', parcelController.patchUserParcel);
 router.delete('home/profil/:user/parcel/delete', parcelController.deleteParcel);
-
 
 module.exports = router;
