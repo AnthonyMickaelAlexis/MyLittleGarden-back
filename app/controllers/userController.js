@@ -1,4 +1,4 @@
-const userDatamapper = require('../middlewares/user')
+// const userDatamapper = require('../middlewares/user')
 
 const userController = {
 
@@ -39,8 +39,51 @@ const userController = {
             console.error(err);
             res.status(500).send(err.message);
         }
+    },
+
+    //get userProfil
+    getUserProfil(req, res) {
+        try{
+            res.send('getUserProfil');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+    patchUserProfil(req, res) {
+        try {
+            res.send('postUserProfil');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+    getUserParcel(req, res) {
+        try {
+            res.send('getUserParcel');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+    postUserParcel(req, res) {
+        try {
+            res.send('postUserParcel');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+    deleteUser(req, res) {
+        try {
+            res.send('deleteUser');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
     }
-    
 };
 
 module.exports = userController;
