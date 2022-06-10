@@ -17,7 +17,7 @@ router.post('/login', userController.loginUserConnection);
 
 // register page
 router.get('/register', userController.registerUser);
-router.post('/register', userController.registerUser);
+router.post('/register', userController.registerUserPost);
 
 /* GET /home/profil/:user/parcel page de récupération parcel du membre 
 router.get(‘home/profil/:user/parcel’, parcelController.getUserParcel);
