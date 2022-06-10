@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const res = require("express/lib/response");
 
 const mainController = {
@@ -6,7 +5,10 @@ const mainController = {
     homePage(_, res) {
         res.send('home');
     },
-
+    async getAllUsers(_, res) {
+        const users = await userDataMapper.findAll();
+        return res.json(users);
+    },
     error404(req, res) {
         res.status(404).render('error404', { url: req.url });
     },
@@ -34,23 +36,3 @@ const mainController = {
 };
 
 module.exports = mainController;
-=======
-const userDataMapper = require('../models/user');
-
-
-const mainController = {
-
-
-
-    async getAllUsers(_, res) {
-        const users = await userDataMapper.findAll();
-        return res.json(users);
-    },
-    // main page
-    homePage(_, res) {
-        res.send('home');
-    }};
-
-
-    module.exports = mainController;
->>>>>>> 06-10-nordine
