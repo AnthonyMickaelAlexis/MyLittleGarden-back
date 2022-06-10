@@ -1,4 +1,4 @@
-// const userDatamapper = require('../middlewares/user')
+const userDataMapper = require('../models/user')
 
 const userController = {
 
@@ -11,7 +11,11 @@ const userController = {
             res.status(500).send(err.message);
         }
     },
-
+    // test getting allusers
+    async getAllUsers(_, res) {
+        const users = await userDataMapper.findAll();
+        return res.json(users);
+    },
     // post login user
     loginUserConnection(req,res) {
         try {
@@ -25,7 +29,7 @@ const userController = {
     // get register user
     async registerUser(req,res) {
         try {
-            // await userDatamapper.insert(req.body)
+            await userDataMapper.insert(req.body)
             res.redirect('/login');
             res.send('registerUser');
         } catch (err) {

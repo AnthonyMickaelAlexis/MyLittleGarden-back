@@ -9,7 +9,7 @@ const parcelController = require('../controllers/parcelController');
 // const cropsController = require('../controllers/cropsController');
 
 router.get('/home', mainController.homePage);
-router.get('/', mainController.getAllUsers);
+router.get('/', userController.getAllUsers);
 // connexion page
 router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
