@@ -2,7 +2,7 @@
 
 const userController = {
 
-    //get loginUser
+    // get login user
     loginUser(req,res) {
         try {
             res.send('loginUser');
@@ -11,7 +11,8 @@ const userController = {
             res.status(500).send(err.message);
         }
     },
-    //post loginUser
+
+    // post login user
     loginUserConnection(req,res) {
         try {
             res.send('loginUserPost');
@@ -20,10 +21,11 @@ const userController = {
             res.status(500).send(err.message);
         }
     },
-    //get registerUser
+
+    // get register user
     async registerUser(req,res) {
         try {
-            await userDatamapper.insert(req.body)
+            // await userDatamapper.insert(req.body)
             res.redirect('/login');
             res.send('registerUser');
         } catch (err) {
@@ -31,7 +33,8 @@ const userController = {
             res.status(500).send(err.message);
         }
     },
-    //post registerUser
+
+    // post register user
     registerUserPost(req,res) {
         try {
             res.send('registerUserPost');
@@ -41,7 +44,7 @@ const userController = {
         }
     },
 
-    //get userProfil
+    // get user profil
     getUserProfil(req, res) {
         try{
             res.send('getUserProfil');
@@ -51,6 +54,7 @@ const userController = {
         }
     },
 
+    // patch user profil
     patchUserProfil(req, res) {
         try {
             res.send('postUserProfil');
@@ -60,22 +64,7 @@ const userController = {
         }
     },
 
-    getUserParcel(req, res) {
-        try {
-            res.send('getUserParcel');
-        } catch (err) {
-            console.error(err);
-            res.status(500).send(err.message);
-        }
-    },
-    postUserParcel(req, res) {
-        try {
-            res.send('postUserParcel');
-        } catch (err) {
-            console.error(err);
-            res.status(500).send(err.message);
-        }
-    },
+    // delete user from database
     deleteUser(req, res) {
         try {
             res.send('deleteUser');
@@ -84,6 +73,7 @@ const userController = {
             res.status(500).send(err.message);
         }
     }
+
 };
 
 module.exports = userController;
