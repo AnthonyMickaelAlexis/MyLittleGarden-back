@@ -12,21 +12,28 @@ CREATE TABLE "user" (
     
 );
 
-CREATE TABLE "vegetable" (
+CREATE TABLE "plant" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
-    vegetable_img TEXT NOT NULL,
+    plant_img TEXT NOT NULL,
     description TEXT NOT NULL
 );
 
 CREATE TABLE "parcel" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT,
-    position_x TEXT NOT NULL,
-    position_y TEXT NOT NULL,
-    user_id int REFERENCES "user" (id),
-    vegetable_id int REFERENCES "vegetable" (id)
+    width INT,
+    height INT
 );
 
+
+
+CREATE TABLE "user_has_plant" (
+    user_id int REFERENCES "user" (id),
+    plant_id int REFERENCES "plant" (id),
+    parcel_id int REFERENCES "parcel" (id),
+    position_x TEXT NOT NULL,
+    position_y TEXT NOT NULL
+);
 
 COMMIT;

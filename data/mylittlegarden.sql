@@ -1,6 +1,41 @@
--- Deploy MyLittleGarden:ajout_de_donnees to pg
-
 BEGIN;
+
+
+
+CREATE TABLE "user" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_name text NOT NULL UNIQUE,
+    email text NOT NULL UNIQUE,
+    password text NOT NULL
+    
+);
+
+CREATE TABLE "plant" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    plant_img TEXT NOT NULL,
+    description TEXT NOT NULL
+);
+
+CREATE TABLE "parcel" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT,
+    width INT,
+    height INT
+);
+
+
+
+CREATE TABLE "user_has_plant" (
+    user_id int REFERENCES "user" (id),
+    plant_id int REFERENCES "plant" (id)
+    parcel_id int REFERENCES "parcel" (id),
+    position_x TEXT NOT NULL,
+    position_y TEXT NOT NULL
+);
+
+
+
 
 INSERT INTO "user" ("user_name", "email", "password") VALUES
 ('mlg', 'mlg@yopmail.com', 'mlg');
@@ -12,8 +47,10 @@ Le terme désigne aussi ce fruit charnu. La tomate se consomme comme un légume-
 ('Aubergine', '/img/aubergine.jpg', 'L''aubergine (Solanum melongena L.) est une plante dicotylédone de la famille des Solanaceae, cultivée pour son légume-fruit. Le terme aubergine désigne la plante et le fruit.');
 
 
-INSERT INTO "parcel" ("name", "width", "height") VALUES
+INSERT INTO "parcel" ("name", "position_x", "position_y") VALUES
 ('garden1', '1', '2'),
 ('garden2', '1', '2'),
 ('garden3', '1', '2');
+
+
 COMMIT;
