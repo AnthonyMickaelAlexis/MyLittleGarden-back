@@ -9,6 +9,8 @@ const router = require('./app/router/index');
 
 const app = express();
 
+app.use(initLocals);
+
 app.use(router);
 
 const PORT = process.env.PORT || 4000;
