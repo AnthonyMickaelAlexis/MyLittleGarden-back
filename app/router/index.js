@@ -3,14 +3,21 @@ const express = require('express');
 const router = express.Router();
 
 const mainController = require('../controllers/mainController');
+const userController = require('../controllers/userController');
+/*
+const parcelController = require('./controllers/parcelController');
+const cropsController = require(./controllers/cropsController');
+*/
 
 router.get('/home', mainController.homePage);
 
-/*
-const parcelController = require('./controllers/parcelController');
-const userController = require('./controllers/userController');
-const cropsController = require(./controllers/cropsController');
-*/
+// connexion page
+router.get('/login', userController.loginUser);
+router.post('/login', userController.loginUserConnection);
+
+// register page
+router.get('/register', userController.registerUser);
+router.post('/register', userController.registerUser);
 
 /* GET /home/profil/:user/parcel page de récupération parcel du membre 
 router.get(‘home/profil/:user/parcel’, parcelController.getUserParcel);
@@ -21,11 +28,7 @@ router.get(‘home/profil/:user’, userController.getUserProfil);
 GET /home/profil/:user/crops page de mise en favori des plants
 router.get’/home/profil/:user/crops’, cropsController.getFavoriteCrops
 
-POST /login page de connexion
-router.post(‘login’, userController.loginUser);
 
-POST /register page d’inscription d’un visiteur au site
-router.post(‘register’, userController.registerUser);
 
 PATCH /home/profil/:user/modify page de modification des infos du membre
 router.patch(‘home/profil/:user/modify’, userController.patchUserModify);
