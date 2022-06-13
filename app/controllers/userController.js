@@ -1,11 +1,15 @@
-const userDataMapper = require('../models/user')
+const userDataMapper = require('../models/user');
+const helperController = require('./helperController');
+
+const bcrypt = require('bcrypt');
+
 
 const userController = {
 
     // get login user
     loginUser(req,res) {
         try {
-            res.send('loginUser');
+            res.send('loginUserPost');
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -16,8 +20,37 @@ const userController = {
         const users = await userDataMapper.findAll();
         return res.json(users);
     },
+
+    
     // post login user
-    loginUserConnection(req,res) {
+    async loginUserConnection(req,res) {
+        try {
+
+            const dataUser =
+            {
+                user_name : req.body.user_name,
+                password : req.body.password
+            };
+            // console.log("1");
+            // const user = await userDataMapper.findByUserName(dataUser.user_name);
+            // console.log("user ------->", user);
+            // console.log("user password -------> ", dataUser.password);
+            // const hash = await bcrypt.compare(dataUser.password, user.password);
+            // console.log("hash -------->", hash);
+            helperController.checkUser(dataUser.user_name, dataUser.password);
+            res.json(user);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+
+
+
+
+    // get register user
+    async registeredUser(req,res) {
         try {
             res.send('loginUserPost');
         } catch (err) {
@@ -26,22 +59,21 @@ const userController = {
         }
     },
 
-    // get register user
-    async registerUser(req,res) {
-        try {
-            await userDataMapper.insert(req.body)
-            res.redirect('/login');
-            res.send('registerUser');
-        } catch (err) {
-            console.error(err);
-            res.status(500).send(err.message);
-        }
-    },
-
     // post register user
-    registerUserPost(req,res) {
+    async registerUserPost(req,res) {
         try {
-            res.send('registerUserPost');
+            let salt = await bcrypt.genSaltSync(10);
+            let hash = bcrypt.hashSync(req.body.password, salt);
+            const dataUser =
+            {
+                user_name : req.body.user_name,
+                firstname : req.body.firstname,
+                lastname : req.body.lastname, 
+                email : req.body.email, 
+                password : hash
+            };
+            await userDataMapper.insert(dataUser);
+            res.json(dataUser);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

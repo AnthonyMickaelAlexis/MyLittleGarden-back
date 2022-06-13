@@ -15,6 +15,15 @@ const app = express();
 
 app.use(initLocals);
 
+const session = require('express-session');
+app.use(session({
+    saveUninitialized: true,
+    resave: true,
+    secret: "gqdsfp^jiokg^dipqsjotgjpherzquioeztryqjnpkobvnkm,lqfdspjihogqzds"
+}));
+
+app.use(express.urlencoded({ extended: true }));
+
 app.use(router);
 
 const PORT = process.env.PORT || 4000;
