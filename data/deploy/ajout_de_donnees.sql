@@ -2,8 +2,8 @@
 
 BEGIN;
 
-INSERT INTO "user" ("user_name","firstname", "lastname" "email", "password") VALUES
-('mlg','mlgfirst', 'mlglast' 'mlg@yopmail.com', 'mlg');
+INSERT INTO "user" ("user_name","firstname", "lastname", "email", "password") VALUES
+('mlg','mlgfirst', 'mlglast', 'mlg@yopmail.com', 'mlg');
 
 
 INSERT INTO "crop" ("name", "crop_img", "description") VALUES

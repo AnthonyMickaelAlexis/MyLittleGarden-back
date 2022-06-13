@@ -30,13 +30,19 @@ CREATE TABLE "parcel" (
 
 
 
-CREATE TABLE "user_has_plant" (
+
+CREATE TABLE "user_has_crop" (
     user_id int REFERENCES "user" (id),
-    plant_id int REFERENCES "plant" (id),
+    crop_id int REFERENCES "crop" (id),
     parcel_id int REFERENCES "parcel" (id),
     position_x INT,
     position_y INT,
     PRIMARY KEY (parcel_id, position_x, position_y)
+);
+CREATE TABLE "favorite_crop" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id int REFERENCES "user" (id),
+    crop_id int REFERENCES "crop" (id)
 );
 
 COMMIT;
