@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP TABLE IF EXISTS "user", "plant", "parcel", "user_has_plant";
+DROP TABLE IF EXISTS "user", "crop", "parcel", "user_has_plant", "plant";
 
 COMMIT;

@@ -7,15 +7,17 @@ BEGIN;
 CREATE TABLE "user" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_name text NOT NULL UNIQUE,
+    firstname text NOT NULL,
+    lastname text NOT NULL,
     email text NOT NULL UNIQUE,
     password text NOT NULL
     
 );
 
-CREATE TABLE "plant" (
+CREATE TABLE "crop" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
-    plant_img TEXT NOT NULL,
+    crop_img TEXT NOT NULL,
     description TEXT NOT NULL
 );
 
@@ -32,8 +34,9 @@ CREATE TABLE "user_has_plant" (
     user_id int REFERENCES "user" (id),
     plant_id int REFERENCES "plant" (id),
     parcel_id int REFERENCES "parcel" (id),
-    position_x TEXT NOT NULL,
-    position_y TEXT NOT NULL
+    position_x INT,
+    position_y INT,
+    PRIMARY KEY (parcel_id, position_x, position_y)
 );
 
 COMMIT;
