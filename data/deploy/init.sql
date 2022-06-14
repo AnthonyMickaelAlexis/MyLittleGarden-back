@@ -12,16 +12,24 @@ CREATE TABLE "user" (
     
 );
 
+<<<<<<< HEAD
 CREATE TABLE "plant" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
     plant_img TEXT NOT NULL,
+=======
+CREATE TABLE "vegetable" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name TEXT NOT NULL,
+    vegetable_img TEXT NOT NULL,
+>>>>>>> 06-09-micka
     description TEXT NOT NULL
 );
 
 CREATE TABLE "parcel" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT,
+<<<<<<< HEAD
     width INT,
     height INT
 );
@@ -36,4 +44,13 @@ CREATE TABLE "user_has_plant" (
     position_y TEXT NOT NULL
 );
 
+=======
+    position_x TEXT NOT NULL,
+    position_y TEXT NOT NULL,
+    user_id int REFERENCES "user" (id),
+    vegetable_id int REFERENCES "vegetable" (id)
+);
+
+
+>>>>>>> 06-09-micka
 COMMIT;
