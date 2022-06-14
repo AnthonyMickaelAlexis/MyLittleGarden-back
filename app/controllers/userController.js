@@ -81,8 +81,19 @@ const userController = {
     },
 
     // get user profil
-    getUserProfil(req, res) {
-        try{
+    async getUserProfil(req, res) {
+        try {
+            console.log("test");
+            const id = parseInt(req.params.user, 10);
+            const result = await userDataMapper.getOneUser(id);
+            const dataUser = {
+                user_name : req.body.user_name,
+                firstname : req.body.firstname,
+                lastname : req.body.lastname, 
+                email : req.body.email, 
+                password : hash
+            }
+            console.log(dataUser);
             res.send('getUserProfil');
         } catch (err) {
             console.error(err);

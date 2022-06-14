@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const helperController = {
 
-    async checkUser(user_name, password) {
+/*     async checkUser(user_name, password) {
         const user = await userDataMapper.findByUserName(user_name);
         console.log(user);
         //... fetch user from a db etc.
@@ -24,7 +24,7 @@ const helperController = {
     // }
     bcrypt.compare(password, user.password,(err, result) => {
         if (!result) {
-            console.log(err);
+            console.log(err));
 
             
         }
@@ -35,6 +35,7 @@ const helperController = {
 
 
 }
+ */
 }
 
 module.exports = helperController;
