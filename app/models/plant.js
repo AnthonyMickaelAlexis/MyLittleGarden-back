@@ -21,7 +21,6 @@ module.exports = {
     },
 
 
-
     async delete(id) {
         const result = await client.query('DELETE FROM plant WHERE id = $1', [id]);
         return !!result.rowCount;

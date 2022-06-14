@@ -7,50 +7,41 @@ BEGIN;
 CREATE TABLE "user" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_name text NOT NULL UNIQUE,
+    firstname text NOT NULL,
+    lastname text NOT NULL,
     email text NOT NULL UNIQUE,
     password text NOT NULL
     
 );
 
-<<<<<<< HEAD
-CREATE TABLE "plant" (
+CREATE TABLE "crop" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
-    plant_img TEXT NOT NULL,
-=======
-CREATE TABLE "vegetable" (
-    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name TEXT NOT NULL,
-    vegetable_img TEXT NOT NULL,
->>>>>>> 06-09-micka
+    crop_img TEXT NOT NULL,
     description TEXT NOT NULL
 );
 
 CREATE TABLE "parcel" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT,
-<<<<<<< HEAD
     width INT,
     height INT
 );
 
 
-
-CREATE TABLE "user_has_plant" (
+CREATE TABLE "user_has_crop" (
     user_id int REFERENCES "user" (id),
-    plant_id int REFERENCES "plant" (id),
+    crop_id int REFERENCES "crop" (id),
     parcel_id int REFERENCES "parcel" (id),
-    position_x TEXT NOT NULL,
-    position_y TEXT NOT NULL
+    position_x INT,
+    position_y INT,
+    PRIMARY KEY (parcel_id, position_x, position_y)
 );
-
-=======
-    position_x TEXT NOT NULL,
-    position_y TEXT NOT NULL,
+CREATE TABLE "favorite_crop" (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id int REFERENCES "user" (id),
-    vegetable_id int REFERENCES "vegetable" (id)
+    crop_id int REFERENCES "crop" (id)
 );
 
 
->>>>>>> 06-09-micka
 COMMIT;
