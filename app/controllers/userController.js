@@ -25,7 +25,9 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
+
            const user = await userDataMapper.findByUserName(req.body.user_name);
+
            if (!user) {
                return res.send('user_name invalide')
            };
