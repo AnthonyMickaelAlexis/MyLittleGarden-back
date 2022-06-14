@@ -13,17 +13,17 @@ module.exports = {
     },
 
 
-    async findByUserName(user_name) {
+    async findByUserName(username) {
        
         const preparedQuery = {
             text: `
                 SELECT * FROM "user" 
                 WHERE user_name = $1;`, 
-                values: [user_name]
+                values: [username]
                 };
         const result = await client.query(preparedQuery);
         console.log(result.rowCount);
-        return result.rows;
+        return result.rows[0];
     },
 
 
