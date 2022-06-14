@@ -1,5 +1,5 @@
 const client = require('../config/db');
-const bcrypt = require('bcrypt');
+
 
 
 module.exports = {
@@ -10,6 +10,11 @@ module.exports = {
         
         const result = await client.query('SELECT * FROM "user"');
         return result.rows;
+    },
+
+    async findByPK(id){
+        const result = await client.query(`SELECT * FROM "user" WHERE "id" = $1`, [id]);
+        return result.rows[0];
     },
 
 

@@ -84,9 +84,18 @@ const userController = {
     },
 
     // get user profil
-    getUserProfil(req, res) {
+    async getUserProfil(req, res, next) {
         try{
-            res.send('getUserProfil');
+            const userId = parseInt(req.params.user, 10);
+            if (Number.isNaN(userId)) {
+                return next();
+            }
+
+            const user = await userDataMapper.findByPK(userId);
+            if (!user) {
+                return next();
+            }
+            res.json(user);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

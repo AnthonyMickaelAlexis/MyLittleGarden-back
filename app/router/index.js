@@ -19,8 +19,8 @@ router.get('/register', userController.registeredUser);
 router.post('/register', userController.registerUserPost);
 
 // member information profil, read, modify and delete
-router.get('home/profil/:user', userController.getUserProfil);
-router.patch('home/profil/:user', userController.patchUserProfil);
+router.get('/home/profil/:user', userController.getUserProfil);
+router.patch('/home/profil/:user', userController.patchUserProfil);
 router.delete('', userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
