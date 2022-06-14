@@ -3,6 +3,7 @@ require('dotenv').config()
 
 
 const express = require("express");
+const cors = require('cors')
 
 // We get express-session to manage user sessions
 // const session = require("express-session");
@@ -23,6 +24,8 @@ app.use(session({
 }));
 
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 app.use(router);
 
