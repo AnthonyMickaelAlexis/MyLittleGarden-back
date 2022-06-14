@@ -15,7 +15,7 @@ router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
 
 // register page
-router.get('/register', userController.registeredUser);
+router.get('/register', userController.registerUser);
 router.post('/register', userController.registerUserPost);
 
 // member information profil, read, modify and delete
