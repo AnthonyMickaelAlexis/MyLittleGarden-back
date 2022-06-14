@@ -77,6 +77,19 @@ module.exports = {
         }
         const result = await client.query(preparedQuery);
         return result.rowCount;
+    },
+
+    async getOneUser(id) {
+        const preparedQuery = {
+            text: `SELECT * 
+            FROM "user" 
+            WHERE id = $1`, 
+            values: [
+                id
+            ]
+        }
+        const result = await client.query(preparedQuery);
+        return result.rows[0];
     }
     /*  
     name: jeanbon

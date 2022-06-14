@@ -25,20 +25,21 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
+           const user = await userDataMapper.findByUserName(req.body.user_name);
+           if (!user) {
+               return res.send('user_name invalide')
+           };
+          
+           const validPassword = await bcrypt.compare(req.body.password, user.password);
+           
+           if (!validPassword) {
+            return res.send('mot de passe invalide')
+        };
 
-            const dataUser =
-            {
-                user_name : req.body.user_name,
-                password : req.body.password
-            };
-            // console.log("1");
-            // const user = await userDataMapper.findByUserName(dataUser.user_name);
-            // console.log("user ------->", user);
-            // console.log("user password -------> ", dataUser.password);
-            // const hash = await bcrypt.compare(dataUser.password, user.password);
-            // console.log("hash -------->", hash);
-            helperController.checkUser(dataUser.user_name, dataUser.password);
-            res.json(user);
+        //On enregistre l'utilisateur en session
+        // req.session.user = user;
+        
+            res.send(`Vous etes bien connecté ${user.user_name}`);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -62,15 +63,15 @@ const userController = {
     // post register user
     async registerUserPost(req,res) {
         try {
-            let salt = await bcrypt.genSaltSync(10);
-            let hash = bcrypt.hashSync(req.body.password, salt);
+            let salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
             const dataUser =
             {
                 user_name : req.body.user_name,
                 firstname : req.body.firstname,
                 lastname : req.body.lastname, 
                 email : req.body.email, 
-                password : hash
+                password : hashedPassword
             };
             await userDataMapper.insert(dataUser);
             res.json(dataUser);
@@ -81,8 +82,10 @@ const userController = {
     },
 
     // get user profil
-    getUserProfil(req, res) {
-        try{
+    async getUserProfil(req, res) {
+        try {
+            const id = parseInt(req.params.user, 10);
+            const result = await userDataMapper.getOneUser(id);
             res.send('getUserProfil');
         } catch (err) {
             console.error(err);

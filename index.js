@@ -36,7 +36,7 @@ const session = require('express-session');
 app.use(session({
     saveUninitialized: true,
     resave: true,
-    secret: "gqdsfp^jiokg^dipqsjotgjpherzquioeztryqjnpkobvnkm,lqfdspjihogqzds"
+    secret: process.env.SESSION_SECRET
 }));
 
 app.use(express.urlencoded({ extended: true }));

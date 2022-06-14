@@ -28,7 +28,10 @@ CREATE TABLE "parcel" (
     height INT
 );
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> readingOfUserAccountData
 CREATE TABLE "user_has_crop" (
     user_id int REFERENCES "user" (id),
     crop_id int REFERENCES "crop" (id),
@@ -37,6 +40,7 @@ CREATE TABLE "user_has_crop" (
     position_y INT,
     PRIMARY KEY (parcel_id, position_x, position_y)
 );
+
 CREATE TABLE "favorite_crop" (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id int REFERENCES "user" (id),
