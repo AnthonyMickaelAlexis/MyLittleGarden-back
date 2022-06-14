@@ -89,6 +89,7 @@ module.exports = {
             ]
         }
         const result = await client.query(preparedQuery);
+        console.log(result.rows[0]);
         return result.rows[0];
     }
     /*  
