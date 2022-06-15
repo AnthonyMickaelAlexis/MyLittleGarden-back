@@ -19,6 +19,7 @@ router.get('/register', userController.registeredUser);
 router.post('/register', userController.registerUserPost);
 
 router.get('/crops', cropController.getAllCrops);
+router.post('/crop', cropController.AddOneCrop)
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user', userController.getUserProfil);

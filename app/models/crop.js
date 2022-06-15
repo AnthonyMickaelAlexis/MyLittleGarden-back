@@ -39,7 +39,7 @@ module.exports = {
             `,
             values: [
                 data.name,
-                data.plant_img,
+                data.crop_img,
                 data.description
             ]
         }
