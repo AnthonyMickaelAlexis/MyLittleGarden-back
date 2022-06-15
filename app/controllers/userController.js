@@ -27,13 +27,9 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
-<<<<<<< HEAD
-           const user = await userDataMapper.findByUserName(req.body.user_name);
-=======
 
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
->>>>>>> loginUser
            if (!user) {
                return res.send('user_name invalide')
            };
@@ -97,13 +93,6 @@ const userController = {
     },
 
     // get user profil
-<<<<<<< HEAD
-    async getUserProfil(req, res) {
-        try {
-            const id = parseInt(req.params.user, 10);
-            const result = await userDataMapper.getOneUser(id);
-            res.send('getUserProfil');
-=======
     async getUserProfil(req, res, next) {
         try{
             const userId = parseInt(req.params.user, 10);
@@ -116,7 +105,6 @@ const userController = {
                 return next();
             }
             res.json(user);
->>>>>>> loginUser
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
