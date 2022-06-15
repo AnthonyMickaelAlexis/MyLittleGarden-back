@@ -1,15 +1,27 @@
-// const userDatamapper = require('../middlewares/user')
+const parcelDatamapper = require('../models/parcel');
 
 const parcelController = {
-
-    getUserParcel(req, res) {
+    
+    // get request on page parcel
+    async getUserParcel(req, res) {
         try {
-            res.send('getUserParcel');
+            const userId = parseInt(req.params.user, 10);
+            if (Number.isNaN(userId)) {
+                return next();
+            }
+
+            const parcel = await parcelDatamapper.getUserParcel(userId);
+            if (!parcel) {
+                return next();
+            }
+            res.json(parcel);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
         }
     },
+
+    // patch request on page parcel
     patchUserParcel(req, res) {
         try {
             res.send('postUserParcel');
@@ -18,6 +30,8 @@ const parcelController = {
             res.status(500).send(err.message);
         }
     },
+
+    // delete request on delete parcel
     deleteParcel(req, res) {
         try {
             res.send('deleteParcel');

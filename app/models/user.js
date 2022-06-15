@@ -12,18 +12,17 @@ module.exports = {
         return result.rows;
     },
 
-    async findByPK(id){
+    async getOneUser(id){
         const result = await client.query(`SELECT * FROM "user" WHERE "id" = $1`, [id]);
         return result.rows[0];
     },
 
 
     async findByUserName(username) {
-       
         const preparedQuery = {
             text: `
                 SELECT * FROM "user" 
-                WHERE user_name = $1;`, 
+                WHERE 'user_name' = $1;`, 
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
@@ -31,7 +30,18 @@ module.exports = {
         return result.rows[0];
     },
 
-
+    async findByUserNameGetId(username) {
+        console.log(username);
+        const preparedQuery = {
+            text: `
+            SELECT "id" FROM "user"
+            WHERE "user_name" = $1;`, 
+                values: [username]
+                };
+        const result = await client.query(preparedQuery);
+        console.log("user id -->", result.rows);
+        return result.rows[0];
+    },
 
     async delete(id) {
         const result = await client.query('DELETE FROM user WHERE id = $1', [id]);
@@ -60,6 +70,7 @@ module.exports = {
             ]
         }
         const result = await client.query(preparedQuery);
+        console.log("insert userdatamapper passed");
         return result.rowCount;
     },
 

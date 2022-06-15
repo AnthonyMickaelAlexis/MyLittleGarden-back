@@ -12,7 +12,10 @@ const router = require('./app/router/index');
 
 const app = express();
 
-app.use(initLocals);
+// parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
+router.get('/home/profil/:user/parcel', parcelController.getUserParcel);
+router.patch('/home/profil/:user/parcel', parcelController.patchUserParcel);
+router.delete('/home/profil/:user/parcel/delete', parcelController.deleteParcel);
 
 app.use(router);
 

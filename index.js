@@ -6,6 +6,7 @@ require('dotenv').config()
 =======
 >>>>>>> 06-09-micka
 const express = require("express");
+const cors = require('cors')
 
 // We get express-session to manage user sessions
 <<<<<<< HEAD
@@ -41,7 +42,8 @@ app.use(session({
 
 app.use(express.urlencoded({ extended: true }));
 
->>>>>>> 06-13-nordine
+app.use(cors());
+
 app.use(router);
 
 const PORT = process.env.PORT || 4000;

@@ -1,5 +1,8 @@
 const userDataMapper = require('../models/user');
 const helperController = require('./helperController');
+const parcelDatamapper = require('../models/parcel');
+const parcelController = require('../controllers/parcelController');
+const userHasPlantDatamapper = require('../models/user_has_plant');
 
 const bcrypt = require('bcrypt');
 
@@ -21,7 +24,6 @@ const userController = {
         return res.json(users);
     },
 
-    
     // post login user
     async loginUserConnection(req,res) {
         try {
@@ -52,10 +54,6 @@ const userController = {
         }
     },
 
-
-
-
-
     // get register user
     async registeredUser(req,res) {
         try {
@@ -69,8 +67,10 @@ const userController = {
     // post register user
     async registerUserPost(req,res) {
         try {
+            // Password encryptation
             let salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
+            // Inserting data of the user from FORM
             const dataUser =
             {
                 user_name : req.body.user_name,
@@ -80,6 +80,15 @@ const userController = {
                 password : hashedPassword
             };
             await userDataMapper.insert(dataUser);
+            const userName = req.body.user_name;
+            // Getting user Id
+            const UserId = await userDataMapper.findByUserNameGetId(userName);
+            // Creating user Parcel
+            const createParcel = await parcelDatamapper.createParcel(userName);
+            // Gettting parcel Id
+            const parcelId = await parcelDatamapper.getParcelId(createParcel);
+            // Use user Id and Parcel Id to create the entry on the linking table "user_has_crop"
+            const createLinkingTable = await userHasPlantDatamapper.insert(UserId, parcelId);
             res.json(dataUser);
         } catch (err) {
             console.error(err);
@@ -102,7 +111,7 @@ const userController = {
                 return next();
             }
 
-            const user = await userDataMapper.findByPK(userId);
+            const user = await userDataMapper.getOneUser(userId);
             if (!user) {
                 return next();
             }
