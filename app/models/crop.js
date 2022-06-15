@@ -8,38 +8,38 @@ module.exports = {
 
     async findAll() {
         
-        const result = await client.query('SELECT * FROM plant');
+        const result = await client.query('SELECT * FROM crop');
         return result.rows;
     },
 
 
-    async findByPk(plantId) {
+    async findByPk(cropId) {
        
-        const result = await client.query('SELECT * FROM user WHERE id = $1', [plantId]);
+        const result = await client.query('SELECT * FROM crop WHERE id = $1', [cropId]);
 
         return result.rows[0];
     },
 
 
     async delete(id) {
-        const result = await client.query('DELETE FROM plant WHERE id = $1', [id]);
+        const result = await client.query('DELETE FROM crop WHERE id = $1', [id]);
         return !!result.rowCount;
     },
 
     async insert(data){
         const preparedQuery = {
             text: `
-                INSERT INTO "plant"
+                INSERT INTO "crop"
                 (
                     "name",
-                    "plant_img",
+                    "crop_img",
                     "description"
                 )
                 VALUES ($1, $2, $3);
             `,
             values: [
                 data.name,
-                data.plant_img,
+                data.crop_img,
                 data.description
             ]
         }

@@ -122,9 +122,17 @@ const userController = {
     },
 
     // delete user from database
-    deleteUser(req, res) {
+    async deleteUser(req, res, next) {
         try {
-            res.send('deleteUser');
+            
+            const userId = parseInt(req.params.user, 10);
+            if (Number.isNaN(userId)) {
+                return next();
+            }
+
+            await userDataMapper.delete(userId);
+            
+            res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
