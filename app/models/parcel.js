@@ -15,12 +15,17 @@ module.exports = {
 
     async findByPk(parcelId) {
        
-        const result = await client.query('SELECT * FROM user WHERE id = $1', [parcelId]);
+        const result = await client.query('SELECT * FROM "user" WHERE id = $1', [parcelId]);
 
         return result.rows[0];
     },
 
+    async getUserParcel(parcelId) {
 
+        const result = await client.query(`SELECT * FROM 'user_has_crop' WHERE id = $1 INNER JOIN 'parcel' ON user_has_crop.parcel_id = parcel.id`, [parcelId]);
+
+        return result.rows;
+    },
 
     async delete(id) {
         const result = await client.query('DELETE FROM parcel WHERE id = $1', [id]);
