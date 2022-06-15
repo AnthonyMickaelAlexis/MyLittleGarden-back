@@ -117,15 +117,12 @@ const userController = {
         try {
             
             const userId = parseInt(req.params.user, 10);
-            console.log(userId);
             if (Number.isNaN(userId)) {
                 return next();
             }
 
-            const user = await userDataMapper.delete(userId);
-            if (!user) {
-                return next();
-            }
+            await userDataMapper.delete(userId);
+            
             res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
             console.error(err);
