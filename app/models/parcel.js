@@ -49,19 +49,18 @@ module.exports = {
             ]
         }
         const result = await client.query(preparedQuery);
-        console.log("createParcel parceldatamapper passed");
         return parcelName;
     },
 
     async getParcelId(parcelName) {
         const preparedQuery = {
             text: `
-                SELECT 'id' FROM "parcel" 
-                WHERE 'name' = $1;`, 
+                SELECT "id" FROM "parcel" 
+                WHERE "name" = $1;`, 
                 values: [parcelName]
                 };
         const result = await client.query(preparedQuery);
-        return result.rows;
+        return result.rows[0];
     },
     
     async delete(id) {

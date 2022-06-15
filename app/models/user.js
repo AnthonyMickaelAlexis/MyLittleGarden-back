@@ -22,7 +22,7 @@ module.exports = {
         const preparedQuery = {
             text: `
                 SELECT * FROM "user" 
-                WHERE user_name = $1;`, 
+                WHERE 'user_name' = $1;`, 
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
@@ -31,14 +31,15 @@ module.exports = {
     },
 
     async findByUserNameGetId(username) {
+        console.log(username);
         const preparedQuery = {
             text: `
-                SELECT 'id' FROM "user" 
-                WHERE 'user_name' = $1;`, 
+            SELECT "id" FROM "user"
+            WHERE "user_name" = $1;`, 
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
-        console.log("findbyusernamegetid userdatamapper passed");
+        console.log("user id -->", result.rows);
         return result.rows[0];
     },
 

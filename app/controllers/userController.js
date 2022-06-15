@@ -63,8 +63,10 @@ const userController = {
     // post register user
     async registerUserPost(req,res) {
         try {
+            // Password encryptation
             let salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
+            // Inserting data of the user from FORM
             const dataUser =
             {
                 user_name : req.body.user_name,
@@ -74,18 +76,15 @@ const userController = {
                 password : hashedPassword
             };
             await userDataMapper.insert(dataUser);
-
-
             const userName = req.body.user_name;
-            console.log("test1");
-            const getUserId = await userDataMapper.findByUserNameGetId(userName);
-            console.log("test2");
+            // Getting user Id
+            const UserId = await userDataMapper.findByUserNameGetId(userName);
+            // Creating user Parcel
             const createParcel = await parcelDatamapper.createParcel(userName);
-            console.log("test3");
+            // Gettting parcel Id
             const parcelId = await parcelDatamapper.getParcelId(createParcel);
-            console.log("test4");
-            const createLinkingTable = await userHasPlantDatamapper.insert(getUserId, parcelId);
-            console.log("test5");
+            // Use user Id and Parcel Id to create the entry on the linking table "user_has_crop"
+            const createLinkingTable = await userHasPlantDatamapper.insert(UserId, parcelId);
             res.json(dataUser);
         } catch (err) {
             console.error(err);
