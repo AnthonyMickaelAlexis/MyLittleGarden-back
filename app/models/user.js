@@ -27,14 +27,13 @@ module.exports = {
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
-        console.log(result.rowCount);
         return result.rows[0];
     },
 
 
 
     async delete(id) {
-        const result = await client.query('DELETE FROM user WHERE id = $1', [id]);
+        const result = await client.query('DELETE FROM "user" WHERE id = $1', [id]);
         return !!result.rowCount;
     },
 
