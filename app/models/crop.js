@@ -15,7 +15,7 @@ module.exports = {
 
     async findByPk(cropId) {
        
-        const result = await client.query('SELECT * FROM user WHERE id = $1', [cropId]);
+        const result = await client.query('SELECT * FROM crop WHERE id = $1', [cropId]);
 
         return result.rows[0];
     },

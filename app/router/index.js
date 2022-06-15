@@ -9,7 +9,7 @@ const parcelController = require('../controllers/parcelController');
 const cropController = require('../controllers/cropController');
 
 router.get('/home', mainController.homePage);
-router.get('/', userController.getAllUsers);
+router.get('/profil/users', userController.getAllUsers);
 // connexion page
 router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
@@ -19,7 +19,9 @@ router.get('/register', userController.registeredUser);
 router.post('/register', userController.registerUserPost);
 
 router.get('/crops', cropController.getAllCrops);
-router.post('/crop', cropController.AddOneCrop)
+router.get('/crop/:id', cropController.getOneCrop);
+router.post('/crop', cropController.AddOneCrop);
+router.delete('/crop/:id', cropController.deleteCrop);
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user', userController.getUserProfil);
