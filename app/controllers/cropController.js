@@ -1,4 +1,5 @@
 const cropDataMapper = require('../models/crop');
+const favoritecropDataMapper = require('../models/favorite_crop');
 
 
 const cropController = {
@@ -67,7 +68,52 @@ const cropController = {
             console.error(err);
             res.status(500).send(err.message);
         }
-    }
+    },
+
+    async AddCropInFavoriteList(req, res, next) {
+        try{
+            const cropId = parseInt(req.params.cropid, 10);
+            if (Number.isNaN(cropId)) {
+                return next();
+            }
+            console.log(cropId)
+            const userid = parseInt(req.params.userid, 10);
+            if (Number.isNaN(userid)) {
+                return next();
+            }
+            console.log(userid)
+
+            await favoritecropDataMapper.insertIntoFavoriteList(cropId,userid);
+            
+            res.send('crop ajouté au favoris');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+
+
+
+    
+
+
+
+    async GetFavoriteListForUser(req, res, next) {
+        try{
+            const userId = parseInt(req.params.userid, 10);
+            if (Number.isNaN(userId)) {
+                return next();
+            }
+
+            const favoriteList = await favoritecropDataMapper.findAllCropsFavorite(userId);
+            res.json(favoriteList);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+    
 
 
 
