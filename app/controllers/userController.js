@@ -1,4 +1,5 @@
 const userDataMapper = require('../models/user');
+const helperController = require('./helperController');
 
 const bcrypt = require('bcrypt');
 
@@ -14,7 +15,6 @@ const userController = {
             res.status(500).send(err.message);
         }
     },
-
     // test getting allusers
     async getAllUsers(_, res) {
         const users = await userDataMapper.findAll();
@@ -37,7 +37,7 @@ const userController = {
             return res.send('mot de passe invalide')
         };
 
-        //We save the user in session
+        //On enregistre l'utilisateur en session
         // req.session.user = user;
         
             res.send(`Vous etes bien connecté ${user.user_name}`);
@@ -48,7 +48,7 @@ const userController = {
     },
 
     // get register user
-    async registerUser(req,res) {
+    async registeredUser(req,res) {
         try {
             res.send('loginUserPost');
         } catch (err) {
@@ -79,11 +79,18 @@ const userController = {
     },
 
     // get user profil
-    async getUserProfil(req, res) {
-        try {
-            const id = parseInt(req.params.user, 10);
-            const result = await userDataMapper.getOneUser(id);
-            res.send('getUserProfil');
+    async getUserProfil(req, res, next) {
+        try{
+            const userId = parseInt(req.params.user, 10);
+            if (Number.isNaN(userId)) {
+                return next();
+            }
+
+            const user = await userDataMapper.getOneUser(userId);
+            if (!user) {
+                return next();
+            }
+            res.json(user);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

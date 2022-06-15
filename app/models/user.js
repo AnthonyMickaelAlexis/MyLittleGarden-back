@@ -12,7 +12,7 @@ module.exports = {
         return result.rows;
     },
 
-    async findByPK(id){
+    async getOneUser(id){
         const result = await client.query(`SELECT * FROM "user" WHERE "id" = $1`, [id]);
         return result.rows[0];
     },
