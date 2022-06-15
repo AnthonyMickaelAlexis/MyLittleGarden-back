@@ -27,22 +27,29 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
-
-           const user = await userDataMapper.findByUserName(req.body.user_name);
-
-           if (!user) {
-               return res.send('user_name invalide')
-           };
-          
-           const validPassword = await bcrypt.compare(req.body.password, user.password);
-           
-           if (!validPassword) {
+            console.log(req.body.user_name);
+            const user = await userDataMapper.findByUserName(req.body.user_name);
+            console.log(user);
+            console.log("test1");
+            if (!user) {
+                return res.send('user_name invalide')
+            };
+            console.log("test2");
+            const validPassword = await bcrypt.compare(req.body.password, user.password);
+            console.log("test3");
+            if (!validPassword) {
             return res.send('mot de passe invalide')
         };
 
         //On enregistre l'utilisateur en session
         // req.session.user = user;
-        
+        console.log("test4");
+            console.log(user);
+            console.log("test5");
+            console.log(user.password);
+            delete user.password;
+            console.log(user.password);
+            console.log("test6");
             res.send(`Vous etes bien connecté ${user.user_name}`);
         } catch (err) {
             console.error(err);

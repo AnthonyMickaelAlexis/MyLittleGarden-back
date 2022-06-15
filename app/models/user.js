@@ -22,7 +22,7 @@ module.exports = {
         const preparedQuery = {
             text: `
                 SELECT * FROM "user" 
-                WHERE 'user_name' = $1;`, 
+                WHERE "user_name" = $1;`, 
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
