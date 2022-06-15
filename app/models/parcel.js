@@ -1,3 +1,4 @@
+const { Client } = require('pg');
 const client = require('../config/db');
 
 
@@ -27,6 +28,42 @@ module.exports = {
         return result.rows;
     },
 
+    async createParcel(userName) {
+        const parcelName = userName + " " + "Parcel";
+        console.log(parcelName);
+        console.log(typeof parcelName);
+        const preparedQuery = {
+            text: `
+                INSERT INTO "parcel"
+                (
+                    "name",
+                    "width",
+                    "height"
+                )
+                VALUES ($1, $2, $3);
+            `,
+            values: [
+                parcelName,
+                5,
+                5
+            ]
+        }
+        const result = await client.query(preparedQuery);
+        console.log("createParcel parceldatamapper passed");
+        return parcelName;
+    },
+
+    async getParcelId(parcelName) {
+        const preparedQuery = {
+            text: `
+                SELECT 'id' FROM "parcel" 
+                WHERE 'name' = $1;`, 
+                values: [parcelName]
+                };
+        const result = await client.query(preparedQuery);
+        return result.rows;
+    },
+    
     async delete(id) {
         const result = await client.query('DELETE FROM parcel WHERE id = $1', [id]);
         return !!result.rowCount;

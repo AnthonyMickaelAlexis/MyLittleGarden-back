@@ -19,7 +19,6 @@ module.exports = {
 
 
     async findByUserName(username) {
-       
         const preparedQuery = {
             text: `
                 SELECT * FROM "user" 
@@ -31,7 +30,17 @@ module.exports = {
         return result.rows[0];
     },
 
-
+    async findByUserNameGetId(username) {
+        const preparedQuery = {
+            text: `
+                SELECT 'id' FROM "user" 
+                WHERE 'user_name' = $1;`, 
+                values: [username]
+                };
+        const result = await client.query(preparedQuery);
+        console.log("findbyusernamegetid userdatamapper passed");
+        return result.rows[0];
+    },
 
     async delete(id) {
         const result = await client.query('DELETE FROM user WHERE id = $1', [id]);
@@ -60,6 +69,7 @@ module.exports = {
             ]
         }
         const result = await client.query(preparedQuery);
+        console.log("insert userdatamapper passed");
         return result.rowCount;
     },
 

@@ -1,5 +1,8 @@
 const userDataMapper = require('../models/user');
 const helperController = require('./helperController');
+const parcelDatamapper = require('../models/parcel');
+const parcelController = require('../controllers/parcelController');
+const userHasPlantDatamapper = require('../models/user_has_plant');
 
 const bcrypt = require('bcrypt');
 
@@ -71,6 +74,18 @@ const userController = {
                 password : hashedPassword
             };
             await userDataMapper.insert(dataUser);
+
+
+            const userName = req.body.user_name;
+            console.log("test1");
+            const getUserId = await userDataMapper.findByUserNameGetId(userName);
+            console.log("test2");
+            const createParcel = await parcelDatamapper.createParcel(userName);
+            console.log("test3");
+            const parcelId = await parcelDatamapper.getParcelId(createParcel);
+            console.log("test4");
+            const createLinkingTable = await userHasPlantDatamapper.insert(getUserId, parcelId);
+            console.log("test5");
             res.json(dataUser);
         } catch (err) {
             console.error(err);

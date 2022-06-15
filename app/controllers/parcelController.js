@@ -1,6 +1,7 @@
 const parcelDatamapper = require('../models/parcel');
 
 const parcelController = {
+    
     // get request on page parcel
     async getUserParcel(req, res) {
         try {
@@ -19,6 +20,7 @@ const parcelController = {
             res.status(500).send(err.message);
         }
     },
+
     // patch request on page parcel
     patchUserParcel(req, res) {
         try {
@@ -28,6 +30,7 @@ const parcelController = {
             res.status(500).send(err.message);
         }
     },
+
     // delete request on delete parcel
     deleteParcel(req, res) {
         try {
