@@ -28,12 +28,12 @@ router.delete('/crop/:id', cropController.deleteCrop);
 // favorite crp list
 
 router.get('/:userid/favori', cropController.GetFavoriteListForUser);
-router.post('/:cropid/:userid', cropController.AddCropInFavoriteList)
+router.post('/:cropid/:userid', cropController.AddCropInFavoriteList);
 
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user', userController.getUserProfil);
-router.patch('/home/profil/:user', userController.patchUserProfil);
+router.patch('/home/profil/:userid', userController.patchUserProfil);
 router.delete('/profil/:user', userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
