@@ -3,6 +3,7 @@ const helperController = require('./helperController');
 const parcelDatamapper = require('../models/parcel');
 const parcelController = require('../controllers/parcelController');
 const userHasPlantDatamapper = require('../models/user_has_plant');
+const favoriteCrop = require('../models/favorite_crop');
 
 const bcrypt = require('bcrypt');
 
@@ -27,29 +28,18 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
-            console.log(req.body.user_name);
             const user = await userDataMapper.findByUserName(req.body.user_name);
-            console.log(user);
-            console.log("test1");
             if (!user) {
                 return res.send('user_name invalide')
             };
-            console.log("test2");
             const validPassword = await bcrypt.compare(req.body.password, user.password);
-            console.log("test3");
             if (!validPassword) {
             return res.send('mot de passe invalide')
         };
 
         //On enregistre l'utilisateur en session
         // req.session.user = user;
-        console.log("test4");
-            console.log(user);
-            console.log("test5");
-            console.log(user.password);
             delete user.password;
-            console.log(user.password);
-            console.log("test6");
             res.send(`Vous etes bien connecté ${user.user_name}`);
         } catch (err) {
             console.error(err);

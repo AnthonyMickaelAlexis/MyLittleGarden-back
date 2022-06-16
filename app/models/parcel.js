@@ -21,11 +21,15 @@ module.exports = {
         return result.rows[0];
     },
 
-    async getUserParcel(parcelId) {
+    async getUserParcel(userId) {
 
-        const result = await client.query(`SELECT * FROM 'user_has_crop' WHERE id = $1 INNER JOIN 'parcel' ON user_has_crop.parcel_id = parcel.id`, [parcelId]);
+        const userHasCrop = await client.query(`SELECT * FROM 'user_has_crop' WHERE id = $1`, [userId]);
+        const parcel = await client.query(`SELECT * FROM 'parcel' WHERE id = $1`, [userHasCrop.parcel_id]);
+        const user = await client.query(`SELECT * FROM "user" WHERE id = $1`, [userHasCrop.user_id]);
+        const favorite_crop = await client.query(`SELECT * FROM "favorite_crop" WHERE user_id = $1`, [userHasCrop.user_id])
+        
 
-        return result.rows;
+        return userHasCrop, parcel, user, favorite_crop;
     },
 
     async createParcel(userName) {
