@@ -3,7 +3,7 @@ const helperController = require('./helperController');
 const parcelDatamapper = require('../models/parcel');
 const parcelController = require('../controllers/parcelController');
 const userHasPlantDatamapper = require('../models/user_has_plant');
-const favoriteCrop = require('../models/favorite_crop');
+
 
 const bcrypt = require('bcrypt');
 

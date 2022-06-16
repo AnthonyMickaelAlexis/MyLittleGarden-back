@@ -7,9 +7,11 @@ const favoriteCropDataMapper = require('../models/favorite_crop');
 const parcelController = {
     
     // get request on page parcel
-    async getUserParcel(req, res) {
+    async getUserParcel(req, res, next) {
         try {
-            const userId = parseInt(req.params.user.id, 10);
+            console.log("test");
+            const userId = req.params.user.id;
+            console.log(userId);
             if (Number.isNaN(userId)) {
                 return next();
             }
@@ -17,7 +19,6 @@ const parcelController = {
             const parcel = await parcelDatamapper.getUserParcel(userId);
             const user = await userDataMapper.getOneUser(userId);
             const favoriteCrop = await favoriteCropDataMapper.findByPk(userId);
-
             if (!parcel && !user) {
                 return next();
             }
