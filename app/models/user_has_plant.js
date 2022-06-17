@@ -40,6 +40,6 @@ module.exports = {
                 userId
             ]
         );
-        return result.rows[0];
+        return result.rows;
     }
     }

@@ -15,16 +15,24 @@ const parcelController = {
                 return next();
             }
             const userHasCrop = await userHasCropDataMapper.findByPk(userId);
-            console.log(userHasCrop.parcel_id);
-            const parcel = await parcelDatamapper.getUserParcel(userHasCrop.parcel_id);
+            const parcel = await parcelDatamapper.getUserParcel(userHasCrop[0].parcel_id);
             const user = await userDataMapper.findByPK(userId);
             const favoriteCrop = await favoriteCropDataMapper.findByUserPk(userId);
             if (!parcel && !user) {
                 return next();
             }
             console.log("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user --->", user, "favoriteCrop --->", favoriteCrop);
+            return {userHasCrop, parcel, user, favoriteCrop};
 
-            res.json("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user", user, "favoriteCrop", favoriteCrop);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+    async updateUserParcel(req,res, next) {
+        try {
+            res.send('updateUserParcel');
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
