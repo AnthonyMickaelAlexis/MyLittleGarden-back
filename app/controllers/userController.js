@@ -113,9 +113,30 @@ const userController = {
     },
 
     // patch user profil
-    patchUserProfil(req, res) {
+    async patchUserProfil(req, res, next) {
         try {
-            res.send('postUserProfil');
+
+            const user = await userDataMapper.findByPK(req.params.userid);
+            if (!user) {
+                return next();
+            }
+
+            let salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password, salt);
+            const dataUser =
+            {
+                user_name : req.body.user_name,
+                firstname : req.body.firstname,
+                lastname : req.body.lastname, 
+                email : req.body.email, 
+                password : hashedPassword
+            };
+            
+
+            const savedUser = await userDataMapper.update(req.params.userid, dataUser);
+            return res.json(savedUser);
+
+        
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

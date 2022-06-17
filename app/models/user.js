@@ -73,44 +73,25 @@ module.exports = {
         return result.rowCount;
     },
 
-    async update (data) {
-        const preparedQuery = {
-            text: `
-                UPDATE "user"
-                (
-                SET "user_name",
-                    "email",
-                    "password"
-                )
-                VALUES ($1, $2, $3);
+    async update (id, data) {
+        const fields = Object.keys(data).map((prop, index) => `"${prop}" = $${index + 1}`);
+        console.log(fields);
+        const values = Object.values(data);
+        console.log(values)
+        const savedUser = await client.query(
+            `
+                UPDATE "user" SET
+                    ${fields}
+                WHERE id = $${fields.length + 1}
+                RETURNING *
             `,
-            values: [
-                data.user_name,
-                data.email,
-                data.password
-            ]
-        }
-        const result = await client.query(preparedQuery);
-        return result.rowCount;
+            [...values, id],
+        );
+
+        return savedUser.rows[0];
     }
-    /*  
-    name: jeanbon
-    email: jeanbon@lemail.mail
-    password: ******************
     
-    
-    
-    
-    UPDATE nom_table
-SET champ1 = 'nouvelle valeur'
-[WHERE condition]
-
-UPDATE table
-SET colonne_1 = 'valeur 1', colonne_2 = 'valeur 2', colonne_3 = 'valeur 3'
-WHERE condition
-
-        */
-
+   
 
 
 
