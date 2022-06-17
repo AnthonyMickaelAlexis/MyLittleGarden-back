@@ -38,8 +38,8 @@ router.patch('/home/profil/:userid', userController.patchUserProfil);
 router.delete('/profil/:user', userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
-router.get('home/profil/:user/parcel', parcelController.getUserParcel);
-router.patch('home/profil/:user/parcel', parcelController.patchUserParcel);
-router.delete('home/profil/:user/parcel/delete', parcelController.deleteParcel);
+router.get('/home/profil/:user/parcel', parcelController.getUserParcel);
+router.patch('/home/profil/:user/parcel', parcelController.patchUserParcel);
+router.delete('/home/profil/:user/parcel/delete', parcelController.deleteParcel);
 
 module.exports = router;

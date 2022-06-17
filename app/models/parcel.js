@@ -23,9 +23,10 @@ module.exports = {
 
     async getUserParcel(parcelId) {
 
-        const result = await client.query(`SELECT * FROM 'user_has_crop' WHERE id = $1 INNER JOIN 'parcel' ON user_has_crop.parcel_id = parcel.id`, [parcelId]);
+        
+        const result = await client.query(`SELECT * FROM "parcel" WHERE id = $1`, [parcelId]);        
 
-        return result.rows;
+        return result.rows[0];
     },
 
     async createParcel(userName) {

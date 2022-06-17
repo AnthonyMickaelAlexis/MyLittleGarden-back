@@ -27,6 +27,19 @@ module.exports = {
         console.log("insert user_has_crop 1");
         const result = await client.query(preparedQuery);
         console.log("insert user_has_crop datamapper passed");
-        return result.rowCount;
+        return result.rows[0];
+    },
+
+    async findByPk(userId) {
+        const result = await client.query(`
+            SELECT * 
+            FROM "user_has_crop"
+            WHERE "user_id" = $1
+            `, 
+            [
+                userId
+            ]
+        );
+        return result.rows[0];
     }
     }
