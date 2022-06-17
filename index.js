@@ -12,8 +12,15 @@ const { homePage } = require('./app/controllers/mainController');
 
 const app = express();
 
+const jwt = require('jsonwebtoken');
+
 app.use(initLocals);
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> TokenSettingUp
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());

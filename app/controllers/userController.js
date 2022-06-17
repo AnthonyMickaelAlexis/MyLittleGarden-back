@@ -6,7 +6,7 @@ const userHasPlantDatamapper = require('../models/user_has_plant');
 
 
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 const userController = {
 
@@ -28,6 +28,7 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
+<<<<<<< HEAD
             const user = await userDataMapper.findByUserName(req.body.user_name);
             if (!user) {
                 return res.send('user_name invalide')
@@ -41,6 +42,32 @@ const userController = {
         // req.session.user = user;
             delete user.password;
             res.send(`Vous etes bien connecté ${user.user_name}`);
+=======
+
+           const user = await userDataMapper.findByUserName(req.body.user_name);
+
+           if (!user) {
+               return res.status(401).json({message:"Ce compte n'existe pas !"})
+           };
+          
+           const validPassword = await bcrypt.compare(req.body.password, user.password);
+           
+           if (!validPassword) {
+            return res.status(401).json({message : ' Mauvais mot de passe'})
+        };
+
+        const token = jwt.sign({
+            id: user.id,
+            user_name: user.user_name,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email
+            }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_DURING});
+
+            res.json({access_token: token});
+
+
+>>>>>>> TokenSettingUp
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
