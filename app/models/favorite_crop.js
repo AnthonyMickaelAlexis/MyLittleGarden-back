@@ -4,8 +4,6 @@ const client = require('../config/db');
 
 module.exports = {
 
-
-
     async findAllCropsFavorite(userId) {
         
         const result = await client.query(
@@ -17,14 +15,12 @@ module.exports = {
         return result.rows;
     },
 
-
     async findByPk(cropId) {
        
         const result = await client.query('SELECT * FROM crop WHERE id = $1', [cropId]);
 
         return result.rows[0];
     },
-
 
     async delete(id) {
         const result = await client.query('DELETE FROM crop WHERE id = $1', [id]);
@@ -50,4 +46,3 @@ module.exports = {
         return result.rowCount;
     },
 };
-
