@@ -8,6 +8,7 @@ const cors = require('cors')
 const initLocals = require('./app/middlewares/initLocals');
 
 const router = require('./app/router/index');
+
 const { homePage } = require('./app/controllers/mainController');
 
 const app = express();
@@ -16,16 +17,12 @@ const jwt = require('jsonwebtoken');
 
 app.use(initLocals);
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> TokenSettingUp
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
 app.use(cors());
+
 
 app.use((req, res, next) => {
     console.log(req.session);

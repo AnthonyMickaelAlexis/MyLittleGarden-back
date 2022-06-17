@@ -28,21 +28,6 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
-<<<<<<< HEAD
-            const user = await userDataMapper.findByUserName(req.body.user_name);
-            if (!user) {
-                return res.send('user_name invalide')
-            };
-            const validPassword = await bcrypt.compare(req.body.password, user.password);
-            if (!validPassword) {
-            return res.send('mot de passe invalide')
-        };
-
-        //On enregistre l'utilisateur en session
-        // req.session.user = user;
-            delete user.password;
-            res.send(`Vous etes bien connecté ${user.user_name}`);
-=======
 
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
@@ -66,8 +51,6 @@ const userController = {
 
             res.json({access_token: token});
 
-
->>>>>>> TokenSettingUp
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -187,3 +170,4 @@ const userController = {
 };
 
 module.exports = userController;
+
