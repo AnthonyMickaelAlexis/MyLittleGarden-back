@@ -24,6 +24,7 @@ app.use(session({
 }));
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(cors());
 
