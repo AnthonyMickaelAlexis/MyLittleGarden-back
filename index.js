@@ -25,11 +25,9 @@ app.use(session({
     maxAge: 3600000
 }));
 
-<<<<<<< HEAD
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.json());
-=======
->>>>>>> parcelGetRequest
 app.use(cors());
 
 app.use((req, res, next) => {
