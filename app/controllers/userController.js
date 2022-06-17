@@ -4,6 +4,7 @@ const parcelDatamapper = require('../models/parcel');
 const parcelController = require('../controllers/parcelController');
 const userHasPlantDatamapper = require('../models/user_has_plant');
 
+
 const bcrypt = require('bcrypt');
 
 
@@ -27,9 +28,11 @@ const userController = {
     // post login user
     async loginUserConnection(req,res) {
         try {
-            console.log(req.body.user_name);
             const user = await userDataMapper.findByUserName(req.body.user_name);
+<<<<<<< HEAD
             console.log(user);
+=======
+>>>>>>> dev
             if (!user) {
                 return res.send('user_name invalide')
             };
@@ -40,10 +43,14 @@ const userController = {
 
         //On enregistre l'utilisateur en session
         // req.session.user = user;
+<<<<<<< HEAD
             console.log(user);
             console.log(user.password);
             delete user.password;
             console.log(user.password);
+=======
+            delete user.password;
+>>>>>>> dev
             res.send(`Vous etes bien connecté ${user.user_name}`);
         } catch (err) {
             console.error(err);
