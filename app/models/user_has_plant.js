@@ -30,8 +30,16 @@ module.exports = {
         return result.rows[0];
     },
 
-    async getInfo(userId) {
-        const result = await client.query(`SELECT * FROM 'user_has_crop' WHERE id = $1`, [userId]);
-        return result.rows;
+    async findByPk(userId) {
+        const result = await client.query(`
+            SELECT * 
+            FROM "user_has_crop"
+            WHERE "user_id" = $1
+            `, 
+            [
+                userId
+            ]
+        );
+        return result.rows[0];
     }
     }

@@ -9,19 +9,21 @@ const parcelController = {
     // get request on page parcel
     async getUserParcel(req, res, next) {
         try {
-            console.log("test");
-            const userId = req.params.user.id;
+            const userId = Number(req.params.user, 10);
             console.log(userId);
             if (Number.isNaN(userId)) {
                 return next();
             }
             const userHasCrop = await userHasCropDataMapper.findByPk(userId);
-            const parcel = await parcelDatamapper.getUserParcel(userId);
+            console.log(userHasCrop.parcel_id);
+            const parcel = await parcelDatamapper.getUserParcel(userHasCrop.parcel_id);
             const user = await userDataMapper.getOneUser(userId);
             const favoriteCrop = await favoriteCropDataMapper.findByPk(userId);
             if (!parcel && !user) {
                 return next();
             }
+            console.log("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user --->", user, "favoriteCrop --->", favoriteCrop);
+
             res.json("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user", user, "favoriteCrop", favoriteCrop);
         } catch (err) {
             console.error(err);
