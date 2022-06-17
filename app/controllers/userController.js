@@ -2,7 +2,7 @@ const userDataMapper = require('../models/user');
 const helperController = require('./helperController');
 
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 const userController = {
 
@@ -29,19 +29,26 @@ const userController = {
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
            if (!user) {
-               return res.send('user_name invalide')
+               return res.status(401).json({message:"Ce compte n'existe pas !"})
            };
           
            const validPassword = await bcrypt.compare(req.body.password, user.password);
            
            if (!validPassword) {
-            return res.send('mot de passe invalide')
+            return res.status(401).json({message : ' Mauvais mot de passe'})
         };
 
-        //On enregistre l'utilisateur en session
-        // req.session.user = user;
-        
-            res.send(`Vous etes bien connecté ${user.user_name}`);
+        const token = jwt.sign({
+            id: user.id,
+            user_name: user.user_name,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email
+            }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_DURING});
+
+            res.json({access_token: token});
+
+
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

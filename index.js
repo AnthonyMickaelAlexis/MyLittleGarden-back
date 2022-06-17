@@ -14,14 +14,11 @@ const router = require('./app/router/index');
 
 const app = express();
 
+const jwt = require('jsonwebtoken');
+
 app.use(initLocals);
 
-const session = require('express-session');
-app.use(session({
-    saveUninitialized: true,
-    resave: true,
-    secret: "gqdsfp^jiokg^dipqsjotgjpherzquioeztryqjnpkobvnkm,lqfdspjihogqzds"
-}));
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
