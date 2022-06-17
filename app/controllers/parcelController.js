@@ -17,8 +17,8 @@ const parcelController = {
             const userHasCrop = await userHasCropDataMapper.findByPk(userId);
             console.log(userHasCrop.parcel_id);
             const parcel = await parcelDatamapper.getUserParcel(userHasCrop.parcel_id);
-            const user = await userDataMapper.getOneUser(userId);
-            const favoriteCrop = await favoriteCropDataMapper.findByPk(userId);
+            const user = await userDataMapper.findByPK(userId);
+            const favoriteCrop = await favoriteCropDataMapper.findByUserPk(userId);
             if (!parcel && !user) {
                 return next();
             }
