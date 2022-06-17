@@ -103,7 +103,7 @@ const userController = {
     },
 
     // patch user profil
-    async patchUserProfil(req, res) {
+    async patchUserProfil(req, res, next) {
         try {
 
             const user = await userDataMapper.findByPK(req.params.userid);
