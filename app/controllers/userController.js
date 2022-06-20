@@ -1,9 +1,9 @@
 const userDataMapper = require('../models/user');
-const helperController = require('./helperController');
+
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const user = require('../models/user');
+
 
 const userController = {
 
@@ -142,6 +142,18 @@ const userController = {
                 email : req.body.email, 
                 password : hashedPassword
             };
+
+            const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
+
+            if (userByUsername) {
+                return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+            };
+
+            const userByEmail = await userDataMapper.findByEmail(dataUser.email)
+
+            if(userByEmail) {
+                return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+            }
             
 
             const savedUser = await userDataMapper.update(req.params.userid, dataUser);

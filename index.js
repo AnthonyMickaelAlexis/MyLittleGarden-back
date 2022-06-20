@@ -7,7 +7,7 @@ const cors = require('cors')
 
 // We get express-session to manage user sessions
 // const session = require("express-session");
-const initLocals = require('./app/middlewares/initLocals');
+// const checkTokenMiddleware = require('./app/middlewares/check');
 
 
 const router = require('./app/router/index');
@@ -15,7 +15,7 @@ const router = require('./app/router/index');
 const app = express();
 
 
-app.use(initLocals);
+// app.use(checkTokenMiddleware);
 
 
 
