@@ -41,6 +41,20 @@ module.exports = {
         console.log("user id -->", result.rows);
         return result.rows[0];
     },
+    
+    async findByEmail(email) {
+       
+        const preparedQuery = {
+            text: `
+                SELECT * FROM "user" 
+                WHERE email = $1;`, 
+                values: [email]
+                };
+        const result = await client.query(preparedQuery);
+        return result.rows[0];
+    },
+
+
 
     async delete(id) {
         const result = await client.query('DELETE FROM "user" WHERE id = $1', [id]);
@@ -89,6 +103,11 @@ module.exports = {
         );
 
         return savedUser.rows[0];
+    }, 
+
+    async deleteAllDataForUser(id) {
+        const result = await client.query('DELETE FROM "favorite_crop" "user_has_crop"   WHERE user_id = $1', [id]);
+        return !!result.rowCount;
     }
     
    

@@ -1,6 +1,6 @@
 const cropDataMapper = require('../models/crop');
 const favoritecropDataMapper = require('../models/favorite_crop');
-
+const userDataMapper = require('../models/user');
 
 const cropController = {
 
@@ -81,7 +81,10 @@ const cropController = {
             if (Number.isNaN(userid)) {
                 return next();
             }
-            console.log(userid)
+            const user = await userDataMapper.findByPK(userid);
+            if (!user) {
+                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+            }
 
             await favoritecropDataMapper.insertIntoFavoriteList(cropId,userid);
             
