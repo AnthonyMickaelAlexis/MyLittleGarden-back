@@ -13,23 +13,13 @@ const { homePage } = require('./app/controllers/mainController');
 
 const app = express();
 
+const jwt = require('jsonwebtoken');
+
 app.use(initLocals);
 
 app.use(express.urlencoded({ extended: true }));
-
-app.use(session({
-    saveUninitialized: true,
-    resave: true,
-    secret: process.env.SESSION_PASS,
-    secure: true,
-    maxAge: 3600000
-}));
-
-<<<<<<< HEAD
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-=======
->>>>>>> parcelGetRequest
+
 app.use(cors());
 
 app.use((req, res, next) => {
