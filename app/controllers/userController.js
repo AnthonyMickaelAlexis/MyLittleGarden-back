@@ -83,17 +83,18 @@ const userController = {
                 email : req.body.email, 
                 password : hashedPassword
             };
-            // const allUsers = await userDataMapper.findAll();
-            // console.log(allUsers)
-            // for (user of allUsers) {
-            //     if (user.user_name === dataUser.user_name) {
-            //         return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
-            //     }
-                // if (user.email === dataUser.email) {
-                //     return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
-                // }
+           
+            const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
 
-            // };
+            if (userByUsername) {
+                return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+            };
+
+            const userByEmail = await userDataMapper.findByEmail(dataUser.email)
+
+            if(userByEmail) {
+                return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+            }
 
             await userDataMapper.insert(dataUser);
             res.json(dataUser);
