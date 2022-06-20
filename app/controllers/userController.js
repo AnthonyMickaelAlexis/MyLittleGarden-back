@@ -3,6 +3,7 @@ const helperController = require('./helperController');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const user = require('../models/user');
 
 const userController = {
 
@@ -44,7 +45,7 @@ const userController = {
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email
-            }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_DURING});
+            }, 'laphrasesuperlonguequecestdifficiledelatrouver', {expiresIn: '1 hour' });
 
             res.json({access_token: token});
 
@@ -74,7 +75,7 @@ const userController = {
         try {
             let salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
-            const dataUser =
+            let dataUser =
             {
                 user_name : req.body.user_name,
                 firstname : req.body.firstname,
@@ -82,6 +83,18 @@ const userController = {
                 email : req.body.email, 
                 password : hashedPassword
             };
+            // const allUsers = await userDataMapper.findAll();
+            // console.log(allUsers)
+            // for (user of allUsers) {
+            //     if (user.user_name === dataUser.user_name) {
+            //         return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+            //     }
+                // if (user.email === dataUser.email) {
+                //     return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+                // }
+
+            // };
+
             await userDataMapper.insert(dataUser);
             res.json(dataUser);
         } catch (err) {
@@ -149,8 +162,8 @@ const userController = {
                 return next();
             }
 
+            await userDataMapper.deleteAllDataForUser(userId);
             await userDataMapper.delete(userId);
-            
             res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
             console.error(err);

@@ -14,7 +14,6 @@ const router = require('./app/router/index');
 
 const app = express();
 
-const jwt = require('jsonwebtoken');
 
 app.use(initLocals);
 
