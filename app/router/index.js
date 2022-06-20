@@ -7,6 +7,7 @@ const userController = require('../controllers/userController');
 const parcelController = require('../controllers/parcelController');
 
 const cropController = require('../controllers/cropController');
+const user_has_plant = require('../models/user_has_plant');
 
 router.get('/home', mainController.homePage);
 router.get('/profil/users', userController.getAllUsers);
@@ -41,5 +42,8 @@ router.delete('/profil/:user', userController.deleteUser);
 router.get('/home/profil/:user/parcel', parcelController.getUserParcel);
 router.patch('/home/profil/:user/parcel', parcelController.patchUserParcel);
 router.delete('/home/profil/:user/parcel/delete', parcelController.deleteParcel);
+
+/* Test routage patch save bdd*/
+router.get('/home/profil/:user/parcelsave', parcelController.patchUserParcel);
 
 module.exports = router;

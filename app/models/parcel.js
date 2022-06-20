@@ -89,4 +89,8 @@ module.exports = {
         const result = await client.query(preparedQuery);
         return result.rowCount;
     },
+
+    patchUserParcel(id){
+        console.log("patchuserparcel");
+    }
 };

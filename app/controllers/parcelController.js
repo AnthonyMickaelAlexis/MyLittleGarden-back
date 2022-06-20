@@ -32,9 +32,23 @@ const parcelController = {
     },
 
     // patch request on page parcel
-    patchUserParcel(req, res) {
+    async patchUserParcel(req, res) {
         try {
-            res.send('postUserParcel');
+            const userHasCrops = [{user_id: 48,crop_id: 1,parcel_id: 2,position_x: 0,position_y: 0}, {user_id: 48,crop_id: 1,parcel_id:2,position_x: 1,position_y: 1}];
+            console.log("test 1");
+            for (key of userHasCrop) {
+                console.log("test 2");
+                    console.log("test 3");
+                    let userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(key);    
+                    console.log("test 4");          
+                    if (userHasCropsReadingDB) {
+                    let userHasCropTable = await userHasCropDataMapper.update(key);
+                    console.log(userHasCropTable);
+                    } else {
+                    let userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(key);
+                    console.log(userHasCropInsert);
+                    }
+            }
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
