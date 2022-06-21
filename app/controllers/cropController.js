@@ -109,6 +109,11 @@ const cropController = {
                 return next();
             }
 
+            const user = await userDataMapper.findByPK(userId);
+            if (!user) {
+                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+            }
+
             const favoriteList = await favoritecropDataMapper.findAllCropsFavorite(userId);
             res.json(favoriteList);
         } catch (err) {

@@ -105,8 +105,13 @@ module.exports = {
         return savedUser.rows[0];
     }, 
 
-    async deleteAllDataForUser(id) {
-        const result = await client.query('DELETE FROM "user_has_crop" "favorite_crop"   WHERE user_id = $1', [id]);
+    async deleteDataForUserInTableUserHasCrop(id) {
+        const result = await client.query('DELETE FROM "user_has_crop" WHERE user_id = $1', [id]);
+        return !!result.rowCount;
+    },
+
+    async deleteDataForUserInTableFavoriteCrop(id) {
+        const result = await client.query('DELETE FROM "favorite_crop" WHERE user_id = $1', [id]);
         return !!result.rowCount;
     }
     

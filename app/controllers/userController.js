@@ -185,7 +185,8 @@ const userController = {
                 return next();
             }
 
-            await userDataMapper.deleteAllDataForUser(userId);
+            await userDataMapper.deleteDataForUserInTableUserHasCrop(userId);
+            await userDataMapper.deleteDataForUserInTableFavoriteCrop(userId);
             await userDataMapper.delete(userId);
             res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
