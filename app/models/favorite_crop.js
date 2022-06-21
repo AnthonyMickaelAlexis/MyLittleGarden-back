@@ -4,7 +4,6 @@ const client = require('../config/db');
 
 module.exports = {
 
-<<<<<<< HEAD
 
 
     async findAllCropsFavorite(userId) {
@@ -51,12 +50,3 @@ module.exports = {
         return result.rowCount;
     },
 };
-=======
-    async findByPk(userId) {
-       
-        const result = await client.query(`SELECT * FROM "favorite_crop" WHERE user_id = $1`, [userId]);
-
-        return result.rows[0];
-    }
-}
->>>>>>> parcelGetRequest
