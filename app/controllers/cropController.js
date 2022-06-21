@@ -76,7 +76,7 @@ const cropController = {
             if (Number.isNaN(cropId)) {
                 return next();
             }
-            console.log(cropId)
+            
             const userid = parseInt(req.params.userid, 10);
             if (Number.isNaN(userid)) {
                 return next();
@@ -116,6 +116,36 @@ const cropController = {
             res.status(500).send(err.message);
         }
     },
+
+
+
+    async DeleteCropInFavoriteList(req, res, next) {
+        try{
+            const cropId = parseInt(req.params.cropid, 10);
+            if (Number.isNaN(cropId)) {
+                return next();
+            }
+            
+            const userid = parseInt(req.params.userid, 10);
+            if (Number.isNaN(userid)) {
+                return next();
+            }
+            const user = await userDataMapper.findByPK(userid);
+            if (!user) {
+                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+            }
+
+            await favoritecropDataMapper.deleteIntoFavoriteList(cropId,userid);
+            
+            res.send('crop supprimé des favoris');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
+
+    
     
 
 
