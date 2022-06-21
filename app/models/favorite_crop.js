@@ -4,6 +4,8 @@ const client = require('../config/db');
 
 module.exports = {
 
+
+
     async findAllCropsFavorite(userId) {
         
         const result = await client.query(
