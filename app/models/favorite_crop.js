@@ -4,7 +4,10 @@ const client = require('../config/db');
 
 module.exports = {
 
-    async findAllCropsFavorite(userId) { 
+
+
+    async findAllCropsFavorite(userId) {
+        
         const result = await client.query(
             `SELECT favorite_crop.id, crop.*
              FROM favorite_crop 

@@ -8,6 +8,7 @@ const userHasPlantDatamapper = require('../models/user_has_plant');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+
 const userController = {
 
     // get login user
@@ -29,6 +30,7 @@ const userController = {
     async loginUserConnection(req,res) {
         try {
 
+
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
            if (!user) {
@@ -47,7 +49,7 @@ const userController = {
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email
-            }, "laphrasesuperlonguequecestdifficiledelatrouver", {expiresIn: "1 hour"});
+            }, 'laphrasesuperlonguequecestdifficiledelatrouver', {expiresIn: '1 hour' });
 
             res.json({access_token: token});
 
@@ -82,6 +84,19 @@ const userController = {
                 email : req.body.email, 
                 password : hashedPassword
             };
+           
+            const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
+
+            if (userByUsername) {
+                return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+            };
+
+            const userByEmail = await userDataMapper.findByEmail(dataUser.email)
+
+            if(userByEmail) {
+                return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+            }
+
             await userDataMapper.insert(dataUser);
             const userName = req.body.user_name;
             // Getting user Id
@@ -107,7 +122,7 @@ const userController = {
                 return next();
             }
 
-            const user = await userDataMapper.findByPK(userId);
+            const user = await userDataMapper.getOneUser(userId);
             if (!user) {
                 return next();
             }
@@ -137,6 +152,18 @@ const userController = {
                 email : req.body.email, 
                 password : hashedPassword
             };
+
+            const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
+
+            if (userByUsername) {
+                return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+            };
+
+            const userByEmail = await userDataMapper.findByEmail(dataUser.email)
+
+            if(userByEmail) {
+                return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+            }
             
 
             const savedUser = await userDataMapper.update(req.params.userid, dataUser);
@@ -158,8 +185,8 @@ const userController = {
                 return next();
             }
 
+            await userDataMapper.deleteAllDataForUser(userId);
             await userDataMapper.delete(userId);
-            
             res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
             console.error(err);
@@ -170,4 +197,3 @@ const userController = {
 };
 
 module.exports = userController;
-
