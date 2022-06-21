@@ -30,7 +30,7 @@ module.exports = {
     },
 
     async createParcel(userName) {
-        const parcelName = userName + " " + "Parcel";
+        const parcelName = userName + " " + "parcel";
         console.log(parcelName);
         console.log(typeof parcelName);
         const preparedQuery = {

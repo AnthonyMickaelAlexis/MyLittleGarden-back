@@ -40,9 +40,9 @@ router.patch('/home/profil/:userid',checkTokenMiddleware, userController.patchUs
 router.delete('/profil/:user',checkTokenMiddleware, userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
-router.get('home/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
-router.patch('home/profil/:user/parcel',checkTokenMiddleware, parcelController.patchUserParcel);
-router.delete('home/profil/:user/parcel/delete',checkTokenMiddleware, parcelController.deleteParcel);
+router.get('/home/profil/:user/parcel', parcelController.getUserParcel);
+router.patch('/home/profil/:user/parcel',checkTokenMiddleware, parcelController.patchUserParcel);
+router.delete('/home/profil/:user/parcel/delete',checkTokenMiddleware, parcelController.deleteParcel);
 
 /* Test routage patch save bdd*/
 router.get('/home/profil/:user/parcelsave', parcelController.patchUserParcel);

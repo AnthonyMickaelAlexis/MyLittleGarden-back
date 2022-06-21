@@ -15,16 +15,17 @@ const parcelController = {
                 return next();
             }
             const userHasCrop = await userHasCropDataMapper.findByPk(userId);
-            console.log(userHasCrop.parcel_id);
-            const parcel = await parcelDatamapper.getUserParcel(userHasCrop.parcel_id);
-            const user = await userDataMapper.getOneUser(userId);
-            const favoriteCrop = await favoriteCropDataMapper.findByPk(userId);
+            console.log("userhascrop parcel id ---->", userHasCrop[0].parcel_id);
+            const parcel = await parcelDatamapper.getUserParcel(userHasCrop[0].parcel_id);
+            const user = await userDataMapper.findByPK(userId);
+            const favoriteCrop = await favoriteCropDataMapper.findAllCropsFavorite(userId);
+            const cropList = await cropDataMapper.findAll();
             if (!parcel && !user) {
                 return next();
             }
             console.log("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user --->", user, "favoriteCrop --->", favoriteCrop);
 
-            res.json("userHasCrop --->", userHasCrop, "parcel --->", parcel, "user", user, "favoriteCrop", favoriteCrop);
+            res.json(userHasCrop);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -34,21 +35,48 @@ const parcelController = {
     // patch request on page parcel
     async patchUserParcel(req, res) {
         try {
-            const userHasCrops = [{user_id: 48,crop_id: 1,parcel_id: 2,position_x: 0,position_y: 0}, {user_id: 48,crop_id: 1,parcel_id:2,position_x: 1,position_y: 1}];
-            console.log("test 1");
-            for (key of userHasCrop) {
-                console.log("test 2");
-                    console.log("test 3");
-                    let userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(key);    
-                    console.log("test 4");          
-                    if (userHasCropsReadingDB) {
-                    let userHasCropTable = await userHasCropDataMapper.update(key);
-                    console.log(userHasCropTable);
-                    } else {
-                    let userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(key);
-                    console.log(userHasCropInsert);
+            const userHasCrops = [{
+                user_id: 56,
+                crop_id: 1,
+                parcel_id: 43,
+                position_x: 1,
+                position_y: 2
+              }, 
+              {
+                user_id: 56,
+                crop_id: 2,
+                parcel_id: 43,
+                position_x: 0,
+                position_y: 0
+            }];
+            for (key of userHasCrops) {
+                let userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(key);             
+                if (userHasCropsReadingDB) {
+                    console.log("userhascropreadingDB --------------->", userHasCropsReadingDB, "key -------->", key);
+                    if (key == userHasCropsReadingDB) {
+                        return true;
+                    } else if (key != userHasCropsReadingDB) {
+                        return false;
                     }
+                    if (
+                        userHasCropsReadingDB.user_id !== key.user_id && 
+                        userHasCropsReadingDB.crop_id !== key.crop_id && 
+                        userHasCropsReadingDB.parcel_id !== key.crop_id && 
+                        userHasCropsReadingDB.position_x !== key.position_x && 
+                        userHasCropsReadingDB.position_y !== key.position_y
+                        ) 
+                        {
+                            let userHasCropTable = await userHasCropDataMapper.update(key);
+                            console.log("userHasCropTableUpdate -->", userHasCropTable);
+                    }
+                } else {
+                console.log("userHasCropInsert init");
+                let userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(key);
+                console.log("userHasCropInsert --->", userHasCropInsert);
+                res.json("Ce qui est envoyé en insert --->", key);
+                }
             }
+            res.send('Parcel bien sauvegardé');
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

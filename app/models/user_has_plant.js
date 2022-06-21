@@ -30,7 +30,8 @@ module.exports = {
         return result.rows[0];
     },
 
-    async insertSavedParcel(userId, cropId, parcelId, position_x, position_y) {
+    async insertSavedParcel(data) {
+        console.log("test 1 insert parcel saved");
         const preparedQuery = {
             text: `
                 INSERT INTO "user_has_crop"
@@ -44,46 +45,54 @@ module.exports = {
                 VALUES ($1, $2, $3, $4, $5);
             `,
             values: [
-                userId,
-                cropId,
-                parcelId,
-                position_x,
-                position_y
+                data.user_id,
+                data.crop_id,
+                data.parcel_id,
+                data.position_x,
+                data.position_y
             ]
         }
+        console.log("test 2 insert parcel saved");
         const result = await client.query(preparedQuery);
+        console.log(result.rows[0]);
         return result.rows[0];
     },
 
     async findByInfo(data) {
+        console.log("test 1 findbyinfo");
         const preparedQuery = {
             text: `
-                SELECT * FROM "user_has_crop"
-                WHERE user_id = $1
+                SELECT * 
+                FROM "user_has_crop"
+                WHERE "parcel_id" = $1 AND "position_x"= $2 AND "position_y" = $3
             `,
             values: [
-            data.user_id
+            data.parcel_id, data.position_x, data.position_y
             ]
         }
+        console.log("test 2 findbyinfo");
         const result = await client.query(preparedQuery);
+        console.log("result.rows[0] findByInfo from user_has_crop -------->", result.rows[0]) 
         return result.rows[0]
     },
 
     async update(data) {
+        console.log("data ---->", data);
         const fields = Object.keys(data).map((prop, index) => `"${prop}" = $${index + 1}`);
-        console.log(fields);
+        console.log("fields --->", fields);
         const values = Object.values(data);
-        console.log(values)
+        console.log("values --->", values)
+        console.log("field length -------->", fields.length + 1);
         const request = await client.query(
             `
                 UPDATE "user_has_crop" SET
                     ${fields}
-                WHERE id = $${fields.length + 1}
+                WHERE user_id = $${fields.length + 1}
                 RETURNING *
             `,
-            [...values, id],
+            [...values, data.user_id],
         );
-
+        console.log("request rows index 0 ----->", request.rows[0]);
         return request.rows[0];
     },
 
@@ -97,6 +106,6 @@ module.exports = {
                 userId
             ]
         );
-        return result.rows[0];
+        return result.rows;
     }
     }
