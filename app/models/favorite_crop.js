@@ -49,16 +49,23 @@ module.exports = {
     },
 
     async deleteIntoFavoriteList(cropid,userid){
-        const preparedQuery = {
-            text: `
-
+        const result = await client.query(
+            `
+            DELETE FROM "favorite_crop"
+            WHERE "crop_id" = $1
+            AND "user_id" = $2
         
-            DELETE FROM "favorite_crop" 
-            WHERE "crop_id" = ${cropid}
-            AND  "user_id" = ${userid}
-           ;`
-        }
-        const result = await client.query(preparedQuery);
-        return result.rowCount;
-    },
+        `, 
+        [
+            cropid,
+            userid
+           
+        ]
+    );
+    return result.rowCount;
+    }
+
+   
+
+
 };

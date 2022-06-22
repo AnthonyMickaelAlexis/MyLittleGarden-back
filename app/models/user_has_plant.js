@@ -117,20 +117,22 @@ module.exports = {
     },
 
     async deleteCropIntoParcel(dataCrop){
-        const preparedQuery = {
-            text: `
-
-        
-            DELETE FROM "user_has_crop" 
-            WHERE "crop_id" = ${dataCrop.crop_id}
-            AND  "user_id" = ${dataCrop.user_id}
-            AND "parcel_id" = ${dataCrop.parcel_id}
-            AND "position_x" = ${dataCrop.position_x}
-            AND "position_y" = ${dataCrop.position_y}
-           ;`
-        }
-        const result = await client.query(preparedQuery);
-        return result.rowCount;
-    },
-
+        const result = await client.query(`
+        DELETE FROM "user_has_crop"
+        WHERE "user_id" = $1
+        AND "crop_id" = $2
+        AND "parcel_id" = $3
+        AND "position_x" = $4
+        AND "position_y" = $5
+        `, 
+        [
+            dataCrop.user_id,
+            dataCrop.crop_id,
+            dataCrop.parcel_id,
+            dataCrop.position_x,
+            dataCrop.position_y
+        ]
+    );
+    return result.rowCount;
     }
+    };
