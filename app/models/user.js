@@ -30,7 +30,7 @@ module.exports = {
     },
 
     async findByUserNameGetId(username) {
-        console.log(username);
+        
         const preparedQuery = {
             text: `
             SELECT "id" FROM "user"
@@ -38,7 +38,7 @@ module.exports = {
                 values: [username]
                 };
         const result = await client.query(preparedQuery);
-        console.log("user id -->", result.rows);
+        
         return result.rows[0];
     },
     

@@ -7,11 +7,28 @@ module.exports = {
 
 
 
-    async findAll() {
+    async findAllParcels() {
         
-        const result = await client.query('SELECT * FROM parcel');
+        const result = await client.query(
+            `SELECT "user".user_name, parcel.*
+        FROM user_has_crop 
+        JOIN "parcel" ON "user_has_crop".parcel_id = "parcel".id
+        JOIN "user" ON "user_has_crop".user_id = "user".id `);
         return result.rows;
     },
+
+    async findParcelByUserId(userId) {
+
+        const result = await client.query(
+            `SELECT parcel.*
+             FROM user_has_crop 
+             JOIN "parcel" ON "user_has_crop".parcel_id = "parcel".id
+             JOIN "user" ON "user_has_crop".user_id = "user".id
+             WHERE "user"."id" = $1` , [userId]);
+        return result.rows[0];
+    },
+    
+
 
 
     async findByPk(parcelId) {
@@ -89,4 +106,17 @@ module.exports = {
         const result = await client.query(preparedQuery);
         return result.rowCount;
     },
+
+
+    async findAllCropsInParcel(userId) {
+        
+        const result = await client.query(
+            `SELECT "parcel".name,  crop.*, position_x, position_y
+             FROM user_has_crop 
+             JOIN "parcel" ON "user_has_crop".parcel_id = "parcel".id
+             JOIN "crop" ON "user_has_crop".crop_id = "crop".id
+             JOIN "user" ON "user_has_crop".user_id = "user".id
+             WHERE "user"."id" = $1` , [userId]);
+        return result.rows;
+    }
 };
