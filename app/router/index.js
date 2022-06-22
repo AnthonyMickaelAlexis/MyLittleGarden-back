@@ -10,6 +10,7 @@ const parcelController = require('../controllers/parcelController');
 
 const cropController = require('../controllers/cropController');
 const user_has_plant = require('../models/user_has_plant');
+const favoriteCropController = require('../controllers/favorite_crop')
 
 router.get('/home', mainController.homePage);
 router.get('/profil/users', checkTokenMiddleware, userController.getAllUsers);
@@ -31,7 +32,7 @@ router.delete('/crop/:id',checkTokenMiddleware, cropController.deleteCrop);
 // favorite crp list
 
 router.get('/:userid/favori',checkTokenMiddleware, cropController.GetFavoriteListForUser);
-router.post('/:cropid/:userid',checkTokenMiddleware, cropController.AddCropInFavoriteList);
+router.post('/:cropid/:userid', favoriteCropController.insertIntoFavoriteList);
 
 
 // member information profil, read, modify and delete

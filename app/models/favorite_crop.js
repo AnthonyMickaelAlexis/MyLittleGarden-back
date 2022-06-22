@@ -1,4 +1,5 @@
 const client = require('../config/db');
+const crop = require('./crop');
 
 
 
@@ -30,6 +31,10 @@ module.exports = {
     },
 
     async insertIntoFavoriteList(cropid,userid){
+        const checkIfFavCropExist = await client.query(`SELECT * FROM 'favorite_crop' WHERE user_id = $1 AND crop_id = $2`,
+        [userid, cropid],
+        )
+        if (checkIfFavCropExist) {
         const preparedQuery = {
             text: `
                 INSERT INTO favorite_crop 
@@ -46,5 +51,9 @@ module.exports = {
         }
         const result = await client.query(preparedQuery);
         return result.rowCount;
+    } else {
+        const exist = console.log("The crop already exist");
+        return exist;
+    }
     },
 };
