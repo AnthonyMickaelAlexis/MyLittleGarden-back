@@ -105,5 +105,15 @@ module.exports = {
             ]
         );
         return result.rows;
-    }
+    },
+
+    async delete(user_id) {
+        const result = await client.query(`UPDATE "user_has_crop" SET
+        crop_id = null
+    WHERE user_id = $1
+    RETURNING *`, [user_id]);
+    console.log("All crops from parcel have been removed")
+        return !!result.rowCount;
+    },
+
     }

@@ -45,6 +45,6 @@ router.patch('/home/profil/:user/parcel',checkTokenMiddleware, parcelController.
 router.delete('/home/profil/:user/parcel/delete',checkTokenMiddleware, parcelController.deleteParcel);
 
 /* Test routage patch save bdd*/
-router.get('/home/profil/:user/parcelsave',checkTokenMiddleware, parcelController.patchUserParcel);
+router.post('/home/profil/:user/parcelsave', parcelController.patchUserParcel);
 
 module.exports = router;
