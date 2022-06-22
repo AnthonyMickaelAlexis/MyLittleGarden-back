@@ -17,6 +17,12 @@ module.exports = {
         return result.rows;
     },
 
+    async checkIfFavoriteCropExist(cropId, userId) {
+        const checkIfFavCropExist = await client.query(`SELECT * FROM "favorite_crop" WHERE user_id = $1 AND crop_id = $2`,
+        [userId, cropId])
+        return checkIfFavCropExist.rows[0];    
+    },
+
     async findByPk(cropId) {
        
         const result = await client.query('SELECT * FROM crop WHERE id = $1', [cropId]);

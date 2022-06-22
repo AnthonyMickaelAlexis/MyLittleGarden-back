@@ -31,7 +31,7 @@ router.delete('/crop/:id',checkTokenMiddleware, cropController.deleteCrop);
 // favorite crp list
 
 router.get('/:userid/favori',checkTokenMiddleware, cropController.GetFavoriteListForUser);
-router.post('/:cropid/:userid',checkTokenMiddleware, cropController.AddCropInFavoriteList);
+router.post('/:cropid/:userid', cropController.AddCropInFavoriteList);
 
 
 // member information profil, read, modify and delete
