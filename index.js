@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.use(router);
 
 app.use((req, res) => {
-    res.status(404).render('404');
+    res.status(404);
   });
 
 const PORT = process.env.PORT || 4000;

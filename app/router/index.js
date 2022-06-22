@@ -9,6 +9,7 @@ const userController = require('../controllers/userController');
 const parcelController = require('../controllers/parcelController');
 
 const cropController = require('../controllers/cropController');
+const user_has_plant = require('../models/user_has_plant');
 
 router.get('/home', mainController.homePage);
 router.get('/profil/users', checkTokenMiddleware, userController.getAllUsers);
@@ -29,7 +30,7 @@ router.delete('/crop/:id',checkTokenMiddleware, cropController.deleteCrop);
 
 // favorite crp list
 
-router.get('/:userid/favori', checkTokenMiddleware, cropController.GetFavoriteListForUser);
+router.get('/:userid/favori',checkTokenMiddleware, cropController.GetFavoriteListForUser);
 router.post('/:cropid/:userid',checkTokenMiddleware, cropController.AddCropInFavoriteList);
 
 
@@ -39,8 +40,11 @@ router.patch('/home/profil/:userid',checkTokenMiddleware, userController.patchUs
 router.delete('/profil/:user',checkTokenMiddleware, userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
-router.get('home/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
-router.patch('home/profil/:user/parcel',checkTokenMiddleware, parcelController.patchUserParcel);
-router.delete('home/profil/:user/parcel/delete',checkTokenMiddleware, parcelController.deleteParcel);
+router.get('/home/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
+router.patch('/home/profil/:user/parcel',checkTokenMiddleware, parcelController.patchUserParcel);
+router.delete('/home/profil/:user/parcel/delete',checkTokenMiddleware, parcelController.deleteParcel);
+
+/* Test routage patch save bdd*/
+router.get('/home/profil/:user/parcelsave',checkTokenMiddleware, parcelController.patchUserParcel);
 
 module.exports = router;
