@@ -53,21 +53,26 @@ const parcelController = {
                 let userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(key);             
                 if (userHasCropsReadingDB) {
                     console.log("userhascropreadingDB --------------->", userHasCropsReadingDB, "key -------->", key);
-                    if (key == userHasCropsReadingDB) {
-                        return true;
-                    } else if (key != userHasCropsReadingDB) {
-                        return false;
-                    }
+                    console.log("comparator", userHasCropsReadingDB.user_id, key.user_id, userHasCropsReadingDB.crop_id, key.crop_id,
+                    userHasCropsReadingDB.parcel_id, key.parcel_id, userHasCropsReadingDB.position_x, key.position_x,
+                    userHasCropsReadingDB.position_y, key.position_y);
                     if (
-                        userHasCropsReadingDB.user_id !== key.user_id && 
-                        userHasCropsReadingDB.crop_id !== key.crop_id && 
-                        userHasCropsReadingDB.parcel_id !== key.crop_id && 
-                        userHasCropsReadingDB.position_x !== key.position_x && 
+                        userHasCropsReadingDB.user_id !== key.user_id || 
+                        userHasCropsReadingDB.crop_id !== key.crop_id || 
+                        userHasCropsReadingDB.parcel_id !== key.parcel_id || 
+                        userHasCropsReadingDB.position_x !== key.position_x || 
                         userHasCropsReadingDB.position_y !== key.position_y
                         ) 
                         {
+                            console.log("Userhascropreadingdb: C'est différent");
                             let userHasCropTable = await userHasCropDataMapper.update(key);
                             console.log("userHasCropTableUpdate -->", userHasCropTable);
+                    } else if (userHasCropsReadingDB.user_id === key.user_id || 
+                        userHasCropsReadingDB.crop_id === key.crop_id || 
+                        userHasCropsReadingDB.parcel_id === key.parcel_id || 
+                        userHasCropsReadingDB.position_x === key.position_x || 
+                        userHasCropsReadingDB.position_y === key.position_y){
+                        console.log("Userhascropreadingdb: C'est pareil");
                     }
                 } else {
                 console.log("userHasCropInsert init");

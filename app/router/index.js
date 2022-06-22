@@ -36,7 +36,7 @@ router.post('/:cropid/:userid',checkTokenMiddleware, cropController.AddCropInFav
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user',checkTokenMiddleware, userController.getUserProfil);
-router.patch('/home/profil/:userid',checkTokenMiddleware, userController.patchUserProfil);
+router.patch('/home/profil/:userid', userController.patchUserProfil);
 router.delete('/profil/:user',checkTokenMiddleware, userController.deleteUser);
 
 // parcel page (main page when the user is connected) read, modify parcel name and delete all crops from the parcel
