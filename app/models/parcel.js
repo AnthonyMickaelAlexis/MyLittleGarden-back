@@ -30,7 +30,7 @@ module.exports = {
     },
 
     async createParcel(userName) {
-        const parcelName = userName + " " + "Parcel";
+        const parcelName = userName + " " + "parcel";
         console.log(parcelName);
         console.log(typeof parcelName);
         const preparedQuery = {
@@ -89,4 +89,8 @@ module.exports = {
         const result = await client.query(preparedQuery);
         return result.rowCount;
     },
+
+    patchUserParcel(id){
+        console.log("patchuserparcel");
+    }
 };
