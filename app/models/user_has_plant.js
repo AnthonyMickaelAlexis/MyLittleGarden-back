@@ -78,19 +78,17 @@ module.exports = {
 
     async update(data) {
         console.log("data ---->", data);
-        const fields = Object.keys(data).map((prop, index) => `"${prop}" = $${index + 1}`);
+        const fields = Object.keys(data).map((prop) => `"${prop}"`);
         console.log("fields --->", fields);
-        const values = Object.values(data);
-        console.log("values --->", values)
         console.log("field length -------->", fields.length + 1);
         const request = await client.query(
             `
                 UPDATE "user_has_crop" SET
-                    ${fields}
-                WHERE user_id = $${fields.length + 1}
+                    crop_id = $1
+                WHERE parcel_id = $2 AND position_x = $3 AND position_y = $4 
                 RETURNING *
             `,
-            [...values, data.user_id],
+            [data.crop_id, data.parcel_id, data.position_x, data.position_y],
         );
         console.log("request rows index 0 ----->", request.rows[0]);
         return request.rows[0];

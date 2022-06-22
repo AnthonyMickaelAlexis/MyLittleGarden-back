@@ -37,10 +37,10 @@ const parcelController = {
         try {
             const userHasCrops = [{
                 user_id: 56,
-                crop_id: 1,
+                crop_id: 2,
                 parcel_id: 43,
-                position_x: 1,
-                position_y: 2
+                position_x: 3,
+                position_y: 3
               }, 
               {
                 user_id: 56,
@@ -78,10 +78,9 @@ const parcelController = {
                 console.log("userHasCropInsert init");
                 let userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(key);
                 console.log("userHasCropInsert --->", userHasCropInsert);
-                res.json("Ce qui est envoyé en insert --->", key);
-                }
             }
-            res.send('Parcel bien sauvegardé');
+        }
+        res.send('Parcel bien sauvegardé');
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
