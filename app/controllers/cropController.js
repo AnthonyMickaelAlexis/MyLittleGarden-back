@@ -76,8 +76,10 @@ const cropController = {
             if (Number.isNaN(cropId)) {
                 return next();
             }
-            console.log(cropId)
+
+            console.log("cropid", cropId);
             const userid = parseInt(req.params.userid, 10);
+            console.log("userid", userid)
             if (Number.isNaN(userid)) {
                 return next();
             }
@@ -85,9 +87,13 @@ const cropController = {
             if (!user) {
                 return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
             }
-
-            await favoritecropDataMapper.insertIntoFavoriteList(cropId,userid);
-            
+            const checkIfCropExist = await favoritecropDataMapper.checkIfFavoriteCropExist(cropId,userid);
+            console.log(checkIfCropExist);
+            if (checkIfCropExist) {
+                console.log("Le légume est déjà en favori");
+            } else {
+                await favoritecropDataMapper.insertIntoFavoriteList(cropId,userid);
+            }
             res.send('crop ajouté au favoris');
         } catch (err) {
             console.error(err);
