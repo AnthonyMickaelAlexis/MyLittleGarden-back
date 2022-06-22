@@ -42,6 +42,7 @@ router.delete('/profil/:user', userController.deleteUser);
 router.get('/parcels',parcelController.getAllParcels)
 router.get('/profil/:user/parcel', parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel', parcelController.AddCropInParcel);
+router.delete('/:userid/:cropid/parcel', parcelController.DeleteCropInParcel);
 router.patch('/profil/:user/parcel',parcelController.patchUserParcel);
 router.delete('/profil/:user/parcel/delete',parcelController.deleteParcel);
 

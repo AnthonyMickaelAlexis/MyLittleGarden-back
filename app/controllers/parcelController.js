@@ -81,7 +81,7 @@ const parcelController = {
                 return res.status(401).json({message:"Cet parcel n'existe pas !"});
             }
 
-            const dataParcel =
+            const dataCrop =
             {
                 user_id : user.id,
                 crop_id : cropId,
@@ -89,9 +89,15 @@ const parcelController = {
                 position_x : req.body.position_x, 
                 position_y : req.body.position_y
             };
+
+            const filledBox = await userHasCropDataMapper.findPositionInParcel(dataCrop);
+
+            if (filledBox) {
+                return res.status(401).json({message:"Cette position est prise !"});
+            }
             
             // insertIntoParcel
-            await userHasCropDataMapper.insertCropInParcel(dataParcel);
+            await userHasCropDataMapper.insertCropInParcel(dataCrop);
             
             res.send(`crop ${cropId} ajouté dans la parcelle de ${user.user_name}`);
         } catch (err) {
@@ -99,6 +105,55 @@ const parcelController = {
             res.status(500).send(err.message);
         }
     },
+
+
+
+    async DeleteCropInParcel(req, res, next) {
+        try{
+            const cropId = parseInt(req.params.cropid, 10);
+            if (Number.isNaN(cropId)) {
+                return next();
+            }
+            
+            const userid = parseInt(req.params.userid, 10);
+            if (Number.isNaN(userid)) {
+                return next();
+            }
+            const user = await userDataMapper.findByPK(userid);
+            if (!user) {
+                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+            }
+
+            const parcel = await parcelDatamapper.findParcelByUserId(userid);
+            if (!parcel) {
+                return res.status(401).json({message:"Cet parcel n'existe pas !"});
+            }
+
+            const dataCrop =
+            {
+                user_id : user.id,
+                crop_id : cropId,
+                parcel_id : parcel.id,
+                position_x : req.body.position_x, 
+                position_y : req.body.position_y
+            };
+
+            const cropInParceExist = await userHasCropDataMapper.findOneCropInParcel(dataCrop);
+
+            if (!cropInParceExist) {
+                return res.status(401).json({message:`Crop${dataCrop.crop_id} inexistant dans cet position  !`});
+            }
+            
+
+            await userHasCropDataMapper.deleteCropIntoParcel(dataCrop);
+            
+            res.send(`crop ${cropId} en position_x${dataCrop.position_x}, position_y ${dataCrop.position_y} supprimé de la parcelle à ${user.user_name}`);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    },
+
 
 }
 
