@@ -32,7 +32,7 @@ router.delete('/crop/:id',checkTokenMiddleware, cropController.deleteCrop);
 
 router.get('/:userid/favori',checkTokenMiddleware,cropController.GetFavoriteListForUser);
 router.post('/:cropid/:userid',checkTokenMiddleware,cropController.AddCropInFavoriteList);
-router.delete('/:userid/:cropid',checkTokenMiddleware,cropController.DeleteCropInFavoriteList)
+router.delete('/:userid/:cropid',checkTokenMiddleware,cropController.DeleteCropInFavoriteList);
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user',checkTokenMiddleware, userController.getUserProfil);
