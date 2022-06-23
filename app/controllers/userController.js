@@ -106,7 +106,8 @@ const userController = {
             // Gettting parcel Id
             const parcelId = await parcelDatamapper.getParcelId(createParcel);
             // Use user Id and Parcel Id to create the entry on the linking table "user_has_crop"
-            const createLinkingTable = await userHasPlantDatamapper.insert(UserId, parcelId);
+            await userHasPlantDatamapper.insert(UserId, parcelId);
+            
             res.json(dataUser);
         } catch (err) {
             console.error(err);
@@ -185,7 +186,8 @@ const userController = {
                 return next();
             }
 
-            await userDataMapper.deleteAllDataForUser(userId);
+            await userDataMapper.deleteDataForUserInTableUserHasCrop(userId);
+            await userDataMapper.deleteDataForUserInTableFavoriteCrop(userId);
             await userDataMapper.delete(userId);
             res.send(`utilisateur ${userId} a bien était supprimé`);
         } catch (err) {
