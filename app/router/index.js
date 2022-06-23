@@ -9,7 +9,7 @@ const userController = require('../controllers/userController');
 const parcelController = require('../controllers/parcelController');
 
 const cropController = require('../controllers/cropController');
-const user_has_plant = require('../models/user_has_plant');
+
 
 router.get('/home', mainController.homePage);
 // router.get('/profil/users', userController.getAllUsers);

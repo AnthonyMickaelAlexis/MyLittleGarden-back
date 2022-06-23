@@ -123,7 +123,7 @@ const userController = {
                 return next();
             }
 
-            const user = await userDataMapper.getOneUser(userId);
+            const user = await userDataMapper.findByPK(userId);
             if (!user) {
                 return next();
             }
