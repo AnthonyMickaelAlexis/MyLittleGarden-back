@@ -49,7 +49,7 @@ const userController = {
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email
-            }, 'laphrasesuperlonguequecestdifficiledelatrouver', {expiresIn: '1 hour' });
+            }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_DURING });
 
             res.json({access_token: token});
 
