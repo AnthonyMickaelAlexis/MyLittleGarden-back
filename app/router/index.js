@@ -9,7 +9,7 @@ const userController = require('../controllers/userController');
 const parcelController = require('../controllers/parcelController');
 
 const cropController = require('../controllers/cropController');
-const user_has_plant = require('../models/user_has_plant');
+
 
 router.get('/home', mainController.homePage);
 // router.get('/profil/users', userController.getAllUsers);
@@ -43,6 +43,7 @@ router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 // router.get('/parcels',parcelController.getAllParcels)
 router.get('/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel',checkTokenMiddleware, parcelController.AddCropInParcel);
+router.post('/profil/:user/:parcel',  parcelController.ModifyName);
 router.delete('/:userid/:cropid/parcel',checkTokenMiddleware, parcelController.DeleteCropInParcel);
 router.patch('/profil/:user/parcel',parcelController.patchUserParcel);
 router.delete('/profil/:user/parcel/delete',checkTokenMiddleware,parcelController.deleteParcel);

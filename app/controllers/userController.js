@@ -50,7 +50,7 @@ const userController = {
             firstname: user.firstname,
             lastname: user.lastname,
             email: user.email
-            }, 'laphrasesuperlonguequecestdifficiledelatrouver', {expiresIn: '1 hour' });
+            }, process.env.JWT_SECRET, {expiresIn: process.env.JWT_DURING });
 
             res.json({access_token: token});
 
@@ -124,7 +124,7 @@ const userController = {
                 return next();
             }
 
-            const user = await userDataMapper.getOneUser(userId);
+            const user = await userDataMapper.findByPK(userId);
             if (!user) {
                 return next();
             }
