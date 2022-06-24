@@ -20,8 +20,8 @@ module.exports = {
             values: [
                 userId.id,
                 parcelId.id,
-                0,
-                0
+                -1,
+                -1
             ]
         }
         
@@ -59,7 +59,6 @@ module.exports = {
     },
 
     async findByInfo(data) {
-        console.log("test 1 findbyinfo");
         const preparedQuery = {
             text: `
                 SELECT * 
@@ -70,9 +69,7 @@ module.exports = {
             data.parcel_id, data.position_x, data.position_y
             ]
         }
-        console.log("test 2 findbyinfo");
         const result = await client.query(preparedQuery);
-        console.log("result.rows[0] findByInfo from user_has_crop -------->", result.rows[0]) 
         return result.rows[0]
     },
 
