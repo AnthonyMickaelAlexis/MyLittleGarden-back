@@ -11,9 +11,6 @@ const parcelController = {
         return res.json(parcels);
     },
 
-
-    
-    
     // get request on page parcel
     async getUserParcel(req, res, next) {
         try {
@@ -37,48 +34,51 @@ const parcelController = {
     async patchUserParcel(req, res) {
         try {
             const userHasCrops = [{
-                user_id: 56,
-                crop_id: 2,
-                parcel_id: 43,
-                position_x: 3,
-                position_y: 3
+                user_id: 1,
+                crop_id: 1,
+                parcel_id: 1,
+                position_x: 5,
+                position_y: 0
               }, 
               {
-                user_id: 56,
-                crop_id: 2,
-                parcel_id: 43,
-                position_x: 0,
+                user_id: 1,
+                crop_id: 3,
+                parcel_id: 1,
+                position_x: 1,
                 position_y: 0
-            }];
-            for (key of userHasCrops) {
-                let userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(key);             
-                if (userHasCropsReadingDB) {
-                    console.log("userhascropreadingDB --------------->", userHasCropsReadingDB, "key -------->", key);
-                    console.log("comparator", userHasCropsReadingDB.user_id, key.user_id, userHasCropsReadingDB.crop_id, key.crop_id,
-                    userHasCropsReadingDB.parcel_id, key.parcel_id, userHasCropsReadingDB.position_x, key.position_x,
-                    userHasCropsReadingDB.position_y, key.position_y);
-                    if (
-                        userHasCropsReadingDB.user_id !== key.user_id || 
-                        userHasCropsReadingDB.crop_id !== key.crop_id || 
-                        userHasCropsReadingDB.parcel_id !== key.parcel_id || 
-                        userHasCropsReadingDB.position_x !== key.position_x || 
-                        userHasCropsReadingDB.position_y !== key.position_y
-                        ) 
-                        {
-                            console.log("Userhascropreadingdb: C'est différent");
-                            let userHasCropTable = await userHasCropDataMapper.update(key);
-                            console.log("userHasCropTableUpdate -->", userHasCropTable);
-                    } else if (userHasCropsReadingDB.user_id === key.user_id || 
-                        userHasCropsReadingDB.crop_id === key.crop_id || 
-                        userHasCropsReadingDB.parcel_id === key.parcel_id || 
-                        userHasCropsReadingDB.position_x === key.position_x || 
-                        userHasCropsReadingDB.position_y === key.position_y){
-                        console.log("Userhascropreadingdb: C'est pareil");
-                    }
-                } else {
-                console.log("userHasCropInsert init");
-                let userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(key);
-                console.log("userHasCropInsert --->", userHasCropInsert);
+            },
+            {
+                user_id: 1,
+                crop_id: 4,
+                parcel_id: 1,
+                position_x: 3,
+                position_y: 0
+            },
+            {
+                user_id: 1,
+                crop_id: 2,
+                parcel_id: 1,
+                position_x: 7,
+                position_y: 0
+            },
+            {
+                user_id: 1,
+                crop_id: 4,
+                parcel_id: 1,
+                position_x: 0,
+                position_y: 1
+            }
+        ];
+            // console.log(JSON.stringify(obj1) === JSON.stringify(obj2))
+            for (crop of userHasCrops) {
+                const userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(crop);         
+                console.log("userhascropsreadingdb", JSON.stringify(userHasCropsReadingDB));
+                console.log("crop", JSON.stringify(crop));
+                if (JSON.stringify(userHasCropsReadingDB) === JSON.stringify(crop)) {
+                    console.log("déjà présent en bdd");
+                } else { 
+                    // const userHasCropTable = await userHasCropDataMapper.update(crop);
+                    const userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(crop);
             }
         }
         res.send('Parcel bien sauvegardé');
@@ -169,7 +169,7 @@ const parcelController = {
 
             const parcel = await parcelDatamapper.findParcelByUserId(userid);
             if (!parcel) {
-                return res.status(401).json({message:"Cet parcel n'existe pas !"});
+                return res.status(401).json({message:"Cette parcel n'existe pas !"});
             }
 
             const dataCrop =

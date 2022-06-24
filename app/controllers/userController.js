@@ -7,6 +7,7 @@ const userHasPlantDatamapper = require('../models/user_has_plant');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const res = require('express/lib/response');
 
 
 const userController = {
@@ -194,8 +195,17 @@ const userController = {
             console.error(err);
             res.status(500).send(err.message);
         }
-    }
+    },
 
+    forgotPassword(req, res) {
+        try {
+            nodemailer;
+            console.log("test");
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    }
 };
 
 module.exports = userController;
