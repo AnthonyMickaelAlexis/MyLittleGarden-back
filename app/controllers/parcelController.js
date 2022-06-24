@@ -197,6 +197,10 @@ const parcelController = {
         }
     },
 
+    async ModifyName(req, res, next) {
+        const changeParcelName = await parcelDatamapper.modifyName(req.body.id, req.body.name);
+
+    }
 
 }
 

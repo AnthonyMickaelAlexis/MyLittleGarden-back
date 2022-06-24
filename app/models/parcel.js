@@ -118,5 +118,15 @@ module.exports = {
              JOIN "user" ON "user_has_crop".user_id = "user".id
              WHERE "user"."id" = $1` , [userId]);
         return result.rows;
+    },
+
+    async modifyName(parcelId, parcelName) {
+        const result = await client.query(
+            `
+            UPDATE "parcel"
+            SET name = $1
+            WHERE id = $2
+            `, [parcelName, parcelId]);
+        return result.rows[0];
     }
 };

@@ -43,6 +43,7 @@ router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 // router.get('/parcels',parcelController.getAllParcels)
 router.get('/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel',checkTokenMiddleware, parcelController.AddCropInParcel);
+router.post('/profil/:user/:parcel',  parcelController.ModifyName);
 router.delete('/:userid/:cropid/parcel',checkTokenMiddleware, parcelController.DeleteCropInParcel);
 router.patch('/profil/:user/parcel',parcelController.patchUserParcel);
 router.delete('/profil/:user/parcel/delete',checkTokenMiddleware,parcelController.deleteParcel);
