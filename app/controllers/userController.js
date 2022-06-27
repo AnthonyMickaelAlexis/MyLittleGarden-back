@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const userDataMapper = require('../models/user');
 const parcelDatamapper = require('../models/parcel');
 const userHasPlantDatamapper = require('../models/user_has_plant');
+const schemaRegister = require('../validation/register.schema');
 
 const userController = {
 
@@ -30,10 +31,11 @@ const userController = {
       if (!user) {
         return res.status(401).json({ message: "Ce compte n'existe pas !" });
       }
+
       const validPassword = await bcrypt.compare(req.body.password, user.password);
 
       if (!validPassword) {
-        return res.status(401).json({ message: 'Mauvais mot de passe' });
+        return res.status(401).json({ message: ' Mauvais mot de passe' });
       }
 
       const token = jwt.sign({
@@ -88,6 +90,10 @@ const userController = {
         return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
       }
 
+      // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
+
+      await schemaRegister.validateAsync(dataUser);
+
       await userDataMapper.insert(dataUser);
       const userName = req.body.user_name;
       // Getting user Id
@@ -102,7 +108,7 @@ const userController = {
       res.json(dataUser);
     } catch (err) {
       console.error(err);
-      res.status(500).send(err.message);
+      res.json({ error: err.details[0].message });
     }
   },
 
@@ -155,11 +161,15 @@ const userController = {
         return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
       }
 
+      // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
+
+      await schemaRegister.validateAsync(dataUser);
+
       const savedUser = await userDataMapper.update(req.params.userid, dataUser);
       return res.json(savedUser);
     } catch (err) {
       console.error(err);
-      res.status(500).send(err.message);
+      res.json({ error: err.details[0].message });
     }
   },
 
