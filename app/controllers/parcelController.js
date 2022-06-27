@@ -1,8 +1,11 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable consistent-return */
 /* eslint-disable no-restricted-syntax */
 const parcelDatamapper = require('../models/parcel');
 const userDataMapper = require('../models/user');
 const userHasCropDataMapper = require('../models/user_has_plant');
+const cropDataMapper = require('../models/crop');
+const { ApiError } = require('../helpers/errorHandler');
 
 const parcelController = {
 
@@ -15,8 +18,14 @@ const parcelController = {
   async getUserParcel(req, res, next) {
     try {
       const userId = Number(req.params.user, 10);
+
       if (Number.isNaN(userId)) {
         return next();
+      }
+
+      const user = await userDataMapper.findByPK(userId);
+      if (!user) {
+        throw new ApiError('This user does not exists', { statusCode: 404 });
       }
 
       const userHasCrop = await parcelDatamapper.findAllCropsInParcel(userId);
@@ -69,12 +78,13 @@ const parcelController = {
       ];
       // console.log(JSON.stringify(obj1) === JSON.stringify(obj2))
       for (const crop of userHasCrops) {
-        // eslint-disable-next-line no-await-in-loop
         const userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(crop);
+        console.log('userhascropsreadingdb', JSON.stringify(userHasCropsReadingDB));
+        console.log('crop', JSON.stringify(crop));
         if (JSON.stringify(userHasCropsReadingDB) === JSON.stringify(crop)) {
-          console.log('Déjà présent en bdd');
+          console.log('déjà présent en bdd');
         } else {
-          // eslint-disable-next-line no-await-in-loop
+          // const userHasCropTable = await userHasCropDataMapper.update(crop);
           await userHasCropDataMapper.insertSavedParcel(crop);
         }
       }
@@ -85,13 +95,14 @@ const parcelController = {
     }
   },
 
-  // delete request to delete all crops on parcel
+  // delete request on delete parcel
   async deleteParcel(req, res) {
     try {
       const userId = Number(req.params.user, 10);
       await userHasCropDataMapper.findByPk(userId);
       await userHasCropDataMapper.delete(userId);
-      res.send('All crops from parcel have been removed');
+      console.log('All crops from parcel have been removed');
+      res.send('deleteParcel');
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);
@@ -104,6 +115,10 @@ const parcelController = {
       if (Number.isNaN(cropId)) {
         return next();
       }
+      const crop = await cropDataMapper.findByPk(cropId);
+      if (!crop) {
+        throw new ApiError('This crop does not exists', { statusCode: 404 });
+      }
 
       const userid = parseInt(req.params.userid, 10);
       if (Number.isNaN(userid)) {
@@ -111,17 +126,17 @@ const parcelController = {
       }
       const user = await userDataMapper.findByPK(userid);
       if (!user) {
-        return res.status(401).json({ message: "Cet utilisateur n'existe pas !" });
+        throw new ApiError('This user does not exists', { statusCode: 404 });
       }
 
       const parcel = await parcelDatamapper.findParcelByUserId(userid);
       if (!parcel) {
-        return res.status(401).json({ message: "Cette parcelle n'existe pas !" });
+        throw new ApiError('This parcel does not exists', { statusCode: 404 });
       }
 
       const dataCrop = {
         user_id: user.id,
-        crop_id: cropId,
+        crop_id: crop.id,
         parcel_id: parcel.id,
         position_x: req.body.position_x,
         position_y: req.body.position_y,
@@ -130,13 +145,13 @@ const parcelController = {
       const filledBox = await userHasCropDataMapper.findPositionInParcel(dataCrop);
 
       if (filledBox) {
-        return res.status(401).json({ message: 'Cette position est prise !' });
+        throw new ApiError('This position is taken', { statusCode: 404 });
       }
 
       // insertIntoParcel
       await userHasCropDataMapper.insertCropInParcel(dataCrop);
 
-      res.send(`Crop ${cropId} ajouté dans la parcelle de ${user.user_name}`);
+      res.send(`crop ${cropId} ajouté dans la parcelle de ${user.user_name}`);
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);
@@ -149,6 +164,10 @@ const parcelController = {
       if (Number.isNaN(cropId)) {
         return next();
       }
+      const crop = await cropDataMapper.findByPk(cropId);
+      if (!crop) {
+        throw new ApiError('This crop does not exists', { statusCode: 404 });
+      }
 
       const userid = parseInt(req.params.userid, 10);
       if (Number.isNaN(userid)) {
@@ -156,17 +175,17 @@ const parcelController = {
       }
       const user = await userDataMapper.findByPK(userid);
       if (!user) {
-        return res.status(401).json({ message: "Cet utilisateur n'existe pas !" });
+        throw new ApiError('This user does not exists', { statusCode: 404 });
       }
 
       const parcel = await parcelDatamapper.findParcelByUserId(userid);
       if (!parcel) {
-        return res.status(401).json({ message: "Cette parcel n'existe pas !" });
+        throw new ApiError('This parcel does not exists', { statusCode: 404 });
       }
 
       const dataCrop = {
         user_id: user.id,
-        crop_id: cropId,
+        crop_id: crop.id,
         parcel_id: parcel.id,
         position_x: req.body.position_x,
         position_y: req.body.position_y,
@@ -175,21 +194,12 @@ const parcelController = {
       const cropInParceExist = await userHasCropDataMapper.findOneCropInParcel(dataCrop);
 
       if (!cropInParceExist) {
-        return res.status(401).json({ message: `Crop${dataCrop.crop_id} inexistant dans cet position  !` });
+        return res.status(401).json({ message: `${crop.name} inexistante dans cette position  !` });
       }
 
       await userHasCropDataMapper.deleteCropIntoParcel(dataCrop);
 
-      res.send(`crop ${cropId} en position_x${dataCrop.position_x}, position_y ${dataCrop.position_y} supprimé de la parcelle à ${user.user_name}`);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send(err.message);
-    }
-  },
-
-  async ModifyName(req, res) {
-    try {
-      await parcelDatamapper.modifyName(req.body.id, req.body.name);
+      res.send(` ${crop.name} en position_x${dataCrop.position_x}, position_y ${dataCrop.position_y} supprimé de la parcelle à ${user.user_name}`);
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);
@@ -197,4 +207,5 @@ const parcelController = {
   },
 
 };
+
 module.exports = parcelController;
