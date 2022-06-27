@@ -1,13 +1,10 @@
 const client = require('../config/db');
 
-
-
 module.exports = {
 
-    async insert(userId, parcelId) {
-        
-        const preparedQuery = {
-            text: `
+  async insert(userId, parcelId) {
+    const preparedQuery = {
+      text: `
                 INSERT INTO "user_has_crop"
                 (
                     "user_id",
@@ -17,23 +14,23 @@ module.exports = {
                 )
                 VALUES ($1, $2, $3, $4);
             `,
-            values: [
-                userId.id,
-                parcelId.id,
-                -1,
-                -1
-            ]
-        }
-        
-        const result = await client.query(preparedQuery);
-        
-        return result.rows[0];
-    },
+      values: [
+        userId.id,
+        parcelId.id,
+        -1,
+        -1,
+      ],
+    };
 
-    async insertSavedParcel(data) {
-        console.log("test 1 insert parcel saved");
-        const preparedQuery = {
-            text: `
+    const result = await client.query(preparedQuery);
+
+    return result.rows[0];
+  },
+
+  async insertSavedParcel(data) {
+    console.log('test 1 insert parcel saved');
+    const preparedQuery = {
+      text: `
                 INSERT INTO "user_has_crop"
                 (
                     "user_id",
@@ -44,103 +41,97 @@ module.exports = {
                 )
                 VALUES ($1, $2, $3, $4, $5);
             `,
-            values: [
-                data.user_id,
-                data.crop_id,
-                data.parcel_id,
-                data.position_x,
-                data.position_y
-            ]
-        }
-        console.log("test 2 insert parcel saved");
-        const result = await client.query(preparedQuery);
-        console.log(result.rows[0]);
-        return result.rows[0];
-    },
+      values: [
+        data.user_id,
+        data.crop_id,
+        data.parcel_id,
+        data.position_x,
+        data.position_y,
+      ],
+    };
+    console.log('test 2 insert parcel saved');
+    const result = await client.query(preparedQuery);
+    console.log(result.rows[0]);
+    return result.rows[0];
+  },
 
-    async findByInfo(data) {
-        const preparedQuery = {
-            text: `
+  async findByInfo(data) {
+    const preparedQuery = {
+      text: `
                 SELECT * 
                 FROM "user_has_crop"
                 WHERE "parcel_id" = $1 AND "position_x"= $2 AND "position_y" = $3
             `,
-            values: [
-            data.parcel_id, data.position_x, data.position_y
-            ]
-        }
-        const result = await client.query(preparedQuery);
-        return result.rows[0]
-    },
+      values: [
+        data.parcel_id, data.position_x, data.position_y,
+      ],
+    };
+    const result = await client.query(preparedQuery);
+    return result.rows[0];
+  },
 
-    async update(data) {
-        console.log("data ---->", data);
-        const fields = Object.keys(data).map((prop) => `"${prop}"`);
-        console.log("fields --->", fields);
-        console.log("field length -------->", fields.length + 1);
-        const request = await client.query(
-            `
+  async update(data) {
+    console.log('data ---->', data);
+    const fields = Object.keys(data).map((prop) => `"${prop}"`);
+    console.log('fields --->', fields);
+    console.log('field length -------->', fields.length + 1);
+    const request = await client.query(
+      `
                 UPDATE "user_has_crop" SET
                     crop_id = $1
                 WHERE parcel_id = $2 AND position_x = $3 AND position_y = $4 
                 RETURNING *
             `,
-            [data.crop_id, data.parcel_id, data.position_x, data.position_y],
-        );
-        console.log("request rows index 0 ----->", request.rows[0]);
-        return request.rows[0];
-    },
+      [data.crop_id, data.parcel_id, data.position_x, data.position_y],
+    );
+    console.log('request rows index 0 ----->', request.rows[0]);
+    return request.rows[0];
+  },
 
-    async findByPk(userId) {
-        const result = await client.query(`
+  async findByPk(userId) {
+    const result = await client.query(
+      `
             SELECT * 
             FROM "user_has_crop"
             WHERE "user_id" = $1
-            `, 
-            [
-                userId
-            ]
-        );
-        return result.rows[0];
-    },
+            `,
+      [
+        userId,
+      ],
+    );
+    return result.rows[0];
+  },
 
-    async delete(user_id) {
-        const result = await client.query(`UPDATE "user_has_crop" SET
+  async delete(userId) {
+    const result = await client.query(`UPDATE "user_has_crop" SET
         crop_id = null
     WHERE user_id = $1
-    RETURNING *`, [user_id]);
-    console.log("All crops from parcel have been removed")
-        return !!result.rowCount;
-    },
+    RETURNING *`, [userId]);
+    console.log('All crops from parcel have been removed');
+    return !!result.rowCount;
+  },
 
-    
-        
-    
-
-
-    async findPositionInParcel(dataCrop) {
-
-        const result = await client.query(`
+  async findPositionInParcel(dataCrop) {
+    const result = await client.query(
+      `
         SELECT * 
         FROM "user_has_crop"
         WHERE "parcel_id" = $1
         AND "position_x" = $2
         AND "position_y" = $3
-        `, 
-        [
-            dataCrop.parcel_id,
-            dataCrop.position_x,
-            dataCrop.position_y
-        ]
+        `,
+      [
+        dataCrop.parcel_id,
+        dataCrop.position_x,
+        dataCrop.position_y,
+      ],
     );
     return result.rows[0];
+  },
 
-
-    },
-
-    async findOneCropInParcel(dataCrop) {
-
-        const result = await client.query(`
+  async findOneCropInParcel(dataCrop) {
+    const result = await client.query(
+      `
         SELECT * 
         FROM "user_has_crop"
         WHERE "user_id" = $1
@@ -148,24 +139,21 @@ module.exports = {
         AND "parcel_id" = $3
         AND "position_x" = $4
         AND "position_y" = $5
-        `, 
-        [
-            dataCrop.user_id,
-            dataCrop.crop_id,
-            dataCrop.parcel_id,
-            dataCrop.position_x,
-            dataCrop.position_y
-        ]
+        `,
+      [
+        dataCrop.user_id,
+        dataCrop.crop_id,
+        dataCrop.parcel_id,
+        dataCrop.position_x,
+        dataCrop.position_y,
+      ],
     );
     return result.rows[0];
+  },
 
-
-    },
-
-    async insertCropInParcel(dataCrop) {
-        
-        const preparedQuery = {
-            text: `
+  async insertCropInParcel(dataCrop) {
+    const preparedQuery = {
+      text: `
                 INSERT INTO "user_has_crop"
                 (
                     "user_id",
@@ -176,37 +164,38 @@ module.exports = {
                 )
                 VALUES ($1, $2, $3, $4, $5);
             `,
-            values: [
-                dataCrop.user_id,
-                dataCrop.crop_id,
-                dataCrop.parcel_id,
-                dataCrop.position_x,
-                dataCrop.position_y
-            ]
-        }
-        
-        const result = await client.query(preparedQuery);
-        
-        return result.rows[0];
-    },
+      values: [
+        dataCrop.user_id,
+        dataCrop.crop_id,
+        dataCrop.parcel_id,
+        dataCrop.position_x,
+        dataCrop.position_y,
+      ],
+    };
 
-    async deleteCropIntoParcel(dataCrop){
-        const result = await client.query(`
+    const result = await client.query(preparedQuery);
+
+    return result.rows[0];
+  },
+
+  async deleteCropIntoParcel(dataCrop) {
+    const result = await client.query(
+      `
         DELETE FROM "user_has_crop"
         WHERE "user_id" = $1
         AND "crop_id" = $2
         AND "parcel_id" = $3
         AND "position_x" = $4
         AND "position_y" = $5
-        `, 
-        [
-            dataCrop.user_id,
-            dataCrop.crop_id,
-            dataCrop.parcel_id,
-            dataCrop.position_x,
-            dataCrop.position_y
-        ]
+        `,
+      [
+        dataCrop.user_id,
+        dataCrop.crop_id,
+        dataCrop.parcel_id,
+        dataCrop.position_x,
+        dataCrop.position_y,
+      ],
     );
     return result.rowCount;
-    }
-    };
+  },
+};
