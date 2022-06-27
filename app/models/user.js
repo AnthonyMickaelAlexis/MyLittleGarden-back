@@ -79,9 +79,7 @@ module.exports = {
 
   async update(id, data) {
     const fields = Object.keys(data).map((prop, index) => `"${prop}" = $${index + 1}`);
-    console.log(fields);
     const values = Object.values(data);
-    console.log(values);
     const savedUser = await client.query(
       `
                 UPDATE "user" SET

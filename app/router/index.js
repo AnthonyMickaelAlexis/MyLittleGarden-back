@@ -7,7 +7,6 @@ const router = express.Router();
 const mainController = require('../controllers/mainController');
 const userController = require('../controllers/userController');
 const parcelController = require('../controllers/parcelController');
-
 const cropController = require('../controllers/cropController');
 
 router.get('/home', mainController.homePage);
