@@ -2,6 +2,8 @@ const cropDataMapper = require('../models/crop');
 const favoritecropDataMapper = require('../models/favorite_crop');
 const userDataMapper = require('../models/user');
 
+const { ApiError} = require('../helpers/errorHandler');
+
 const cropController = {
 
     async getAllCrops(_, res) {
@@ -19,9 +21,9 @@ const cropController = {
 
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                return next();
+                throw new ApiError('Crop not found', { statusCode: 404 });
             }
-            res.json(crop);
+            return res.json(crop);
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -60,10 +62,14 @@ const cropController = {
             if (Number.isNaN(cropId)) {
                 return next();
             }
+            const crop = await cropDataMapper.findByPk(cropId);
+            if (!crop) {
+                throw new ApiError('This crop does not exists', { statusCode: 404 });
+            }
 
             await cropDataMapper.delete(cropId);
             
-            res.send(` le crop ${cropId} a bien était supprimé`);
+            return res.status(204).json()
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
@@ -76,15 +82,20 @@ const cropController = {
             if (Number.isNaN(cropId)) {
                 return next();
             }
+
+            const crop = await cropDataMapper.findByPk(cropId);
+            if (!crop) {
+                throw new ApiError('This crop does not exists', { statusCode: 404 });
+            }
             
             const userid = parseInt(req.params.userid, 10);
-            console.log("userid", userid)
+        
             if (Number.isNaN(userid)) {
                 return next();
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+                throw new ApiError('This user does not exists', { statusCode: 404 });
             }
             const checkIfCropExist = await favoritecropDataMapper.checkIfFavoriteCropExist(cropId,userid);
             console.log(checkIfCropExist);
@@ -116,7 +127,7 @@ const cropController = {
 
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+                throw new ApiError('This user does not exists', { statusCode: 404 });
             }
 
             const favoriteList = await favoritecropDataMapper.findAllCropsFavorite(userId);
@@ -142,28 +153,17 @@ const cropController = {
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                return res.status(401).json({message:"Cet utilisateur n'existe pas !"});
+                throw new ApiError('This user does not exists', { statusCode: 404 });
             }
 
             await favoritecropDataMapper.deleteIntoFavoriteList(cropId,userid);
             
-            res.send('crop supprimé des favoris');
+            return res.status(204).json();
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
         }
-    },
-
-
-    
-    
-
-
-
-
-
-
-
+    }
 
 
 

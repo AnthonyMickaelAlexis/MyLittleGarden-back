@@ -1,6 +1,8 @@
 const express = require('express');
 
-const checkTokenMiddleware = require('../middlewares/check')
+const checkTokenMiddleware = require('../middlewares/check');
+
+const {ApiError}  = require('../helpers/errorHandler');
 
 const router = express.Router();
 
@@ -32,7 +34,7 @@ router.delete('/crop/:id',checkTokenMiddleware, cropController.deleteCrop);
 
 router.get('/:userid/favori',checkTokenMiddleware,cropController.GetFavoriteListForUser);
 router.post('/:cropid/:userid',checkTokenMiddleware,cropController.AddCropInFavoriteList);
-router.delete('/:userid/:cropid',cropController.DeleteCropInFavoriteList);
+router.delete('/:userid/:cropid',checkTokenMiddleware,cropController.DeleteCropInFavoriteList);
 
 // member information profil, read, modify and delete
 router.get('/home/profil/:user',checkTokenMiddleware, userController.getUserProfil);
@@ -44,7 +46,17 @@ router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 router.get('/profil/:user/parcel',checkTokenMiddleware, parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel',checkTokenMiddleware, parcelController.AddCropInParcel);
 router.delete('/:userid/:cropid/parcel',checkTokenMiddleware, parcelController.DeleteCropInParcel);
-router.patch('/profil/:user/parcel',parcelController.patchUserParcel);
+router.patch('/profil/:user/parcel',checkTokenMiddleware,parcelController.patchUserParcel);
 router.delete('/profil/:user/parcel/delete',checkTokenMiddleware,parcelController.deleteParcel);
+
+
+router.use(() => {
+    // Ici on force une erreur, afin de déclencher le gestionnaire d'erreur et donc l'affichage de
+    // l'erreur
+    throw new ApiError('API Route not found', { statusCode: 404 });
+});
+
+
+
 
 module.exports = router;

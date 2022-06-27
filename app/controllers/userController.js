@@ -1,7 +1,9 @@
 const userDataMapper = require('../models/user');
 const parcelDatamapper = require('../models/parcel');
 const userHasPlantDatamapper = require('../models/user_has_plant');
-const schemaRegister = require('../validation/register.schema')
+const schemaRegister = require('../validation/register.schema');
+
+const { ApiError} = require('../helpers/errorHandler');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -32,13 +34,13 @@ const userController = {
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
            if (!user) {
-               return res.status(401).json({message:"Ce compte n'existe pas !"})
+            throw new ApiError(`This account does not exist`, { statusCode: 404 });
            };
           
            const validPassword = await bcrypt.compare(req.body.password, user.password);
            
            if (!validPassword) {
-            return res.status(401).json({message : ' Mauvais mot de passe'})
+            throw new ApiError(`Bad password`, { statusCode: 404 });
         };
 
         const token = jwt.sign({
@@ -86,13 +88,13 @@ const userController = {
             const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
 
             if (userByUsername) {
-                return res.status(401).json({message:`${dataUser.user_name} existe deja !`})
+                throw new ApiError(`This username ${dataUser.user_name} already exists`, { statusCode: 404 });
             };
 
             const userByEmail = await userDataMapper.findByEmail(dataUser.email)
 
             if(userByEmail) {
-                return res.status(401).json({message:`Un Compte avec cet email : ${dataUser.email} est deja crée `})
+                throw new ApiError(`An account with this email ${dataUser.email} already exists`, { statusCode: 404 });
             }
 
             // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
@@ -127,7 +129,7 @@ const userController = {
 
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                return next();
+                throw new ApiError('This user does not exists', { statusCode: 404 });
             }
             res.json(user);
         } catch (err) {
@@ -142,7 +144,7 @@ const userController = {
 
             const user = await userDataMapper.findByPK(req.params.userid);
             if (!user) {
-                return next();
+                throw new ApiError('This user does not exists', { statusCode: 404 });
             }
 
             let salt = await bcrypt.genSalt(10);
@@ -191,11 +193,15 @@ const userController = {
             if (Number.isNaN(userId)) {
                 return next();
             }
+            const user = await userDataMapper.findByPK(userId);
+            if (!user) {
+                throw new ApiError('This user does not exists', { statusCode: 404 });
+            }
 
             await userDataMapper.deleteDataForUserInTableUserHasCrop(userId);
             await userDataMapper.deleteDataForUserInTableFavoriteCrop(userId);
             await userDataMapper.delete(userId);
-            res.send(`utilisateur ${userId} a bien était supprimé`);
+            return res.status(204).json()
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);
