@@ -14,7 +14,6 @@ const cropController = require('../controllers/cropController');
 router.get('/home', mainController.homePage);
 // router.get('/profil/users', userController.getAllUsers);
 // connexion page
-router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
 
 // register page
