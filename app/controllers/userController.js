@@ -3,8 +3,8 @@ const helperController = require('./helperController');
 const parcelDatamapper = require('../models/parcel');
 const parcelController = require('../controllers/parcelController');
 const userHasPlantDatamapper = require('../models/user_has_plant');
-
-
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const res = require('express/lib/response');
@@ -199,8 +199,29 @@ const userController = {
 
     forgotPassword(req, res) {
         try {
-            nodemailer;
-            console.log("test");
+            const transporter = nodemailer.createTransport(smtpTransport({
+                service: 'gmail',
+                host: 'smtp.gmail.com',
+                auth: {
+                  user: 'alexis.anthony.bx@gmail.com',
+                  pass: process.env.GMAIL_PASSWD
+                }
+              }));
+              
+              const mailOptions = {
+                from: 'alexis.anthony.bx@gmail.com',
+                to: 'alexis.anthony.bx@gmail.com',
+                subject: 'Sending Email using Node.js[nodemailer]',
+                text: 'That was easy!'
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                }
+              });
         } catch (err) {
             console.error(err);
             res.status(500).send(err.message);

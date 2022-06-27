@@ -16,7 +16,7 @@ router.get('/home', mainController.homePage);
 // connexion page
 router.get('/login', userController.loginUser);
 router.post('/login', userController.loginUserConnection);
-
+router.post('/:userid/forgotpassword', userController.forgotPassword);
 // register page
 router.get('/register', userController.registeredUser);
 router.post('/register', userController.registerUserPost);
