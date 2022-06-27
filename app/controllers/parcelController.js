@@ -15,7 +15,6 @@ const parcelController = {
   async getUserParcel(req, res, next) {
     try {
       const userId = Number(req.params.user, 10);
-      console.log(userId);
       if (Number.isNaN(userId)) {
         return next();
       }
@@ -72,10 +71,8 @@ const parcelController = {
       for (const crop of userHasCrops) {
         // eslint-disable-next-line no-await-in-loop
         const userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(crop);
-        console.log('userhascropsreadingdb', JSON.stringify(userHasCropsReadingDB));
-        console.log('crop', JSON.stringify(crop));
         if (JSON.stringify(userHasCropsReadingDB) === JSON.stringify(crop)) {
-          console.log('déjà présent en bdd');
+          console.log('Déjà présent en bdd');
         } else {
           // eslint-disable-next-line no-await-in-loop
           await userHasCropDataMapper.insertSavedParcel(crop);
@@ -94,7 +91,6 @@ const parcelController = {
       const userId = Number(req.params.user, 10);
       await userHasCropDataMapper.findByPk(userId);
       await userHasCropDataMapper.delete(userId);
-      console.log('All crops from parcel have been removed');
       res.send('All crops from parcel have been removed');
     } catch (err) {
       console.error(err);
@@ -120,7 +116,7 @@ const parcelController = {
 
       const parcel = await parcelDatamapper.findParcelByUserId(userid);
       if (!parcel) {
-        return res.status(401).json({ message: "Cet parcel n'existe pas !" });
+        return res.status(401).json({ message: "Cette parcelle n'existe pas !" });
       }
 
       const dataCrop = {
@@ -140,7 +136,7 @@ const parcelController = {
       // insertIntoParcel
       await userHasCropDataMapper.insertCropInParcel(dataCrop);
 
-      res.send(`crop ${cropId} ajouté dans la parcelle de ${user.user_name}`);
+      res.send(`Crop ${cropId} ajouté dans la parcelle de ${user.user_name}`);
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);

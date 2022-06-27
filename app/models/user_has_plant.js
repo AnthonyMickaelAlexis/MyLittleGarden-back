@@ -28,7 +28,6 @@ module.exports = {
   },
 
   async insertSavedParcel(data) {
-    console.log('test 1 insert parcel saved');
     const preparedQuery = {
       text: `
                 INSERT INTO "user_has_crop"
@@ -49,9 +48,7 @@ module.exports = {
         data.position_y,
       ],
     };
-    console.log('test 2 insert parcel saved');
     const result = await client.query(preparedQuery);
-    console.log(result.rows[0]);
     return result.rows[0];
   },
 
@@ -71,10 +68,6 @@ module.exports = {
   },
 
   async update(data) {
-    console.log('data ---->', data);
-    const fields = Object.keys(data).map((prop) => `"${prop}"`);
-    console.log('fields --->', fields);
-    console.log('field length -------->', fields.length + 1);
     const request = await client.query(
       `
                 UPDATE "user_has_crop" SET
@@ -84,7 +77,6 @@ module.exports = {
             `,
       [data.crop_id, data.parcel_id, data.position_x, data.position_y],
     );
-    console.log('request rows index 0 ----->', request.rows[0]);
     return request.rows[0];
   },
 
@@ -172,9 +164,7 @@ module.exports = {
         dataCrop.position_y,
       ],
     };
-
     const result = await client.query(preparedQuery);
-
     return result.rows[0];
   },
 

@@ -55,7 +55,7 @@ const cropController = {
         return next();
       }
       await cropDataMapper.delete(cropId);
-      res.send(` le crop ${cropId} a bien était supprimé`);
+      res.send(` Le crop ${cropId} a bien été supprimé`);
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);
@@ -69,7 +69,6 @@ const cropController = {
         return next();
       }
       const userid = parseInt(req.params.userid, 10);
-      console.log('userid', userid);
       if (Number.isNaN(userid)) {
         return next();
       }
@@ -78,13 +77,12 @@ const cropController = {
         return res.status(401).json({ message: "Cet utilisateur n'existe pas !" });
       }
       const checkCropExist = await favoritecropDataMapper.checkIfFavoriteCropExist(cropId, userid);
-      console.log(checkCropExist);
       if (checkCropExist) {
         console.log('Le légume est déjà en favori');
       } else {
         await favoritecropDataMapper.insertIntoFavoriteList(cropId, userid);
       }
-      res.send('crop ajouté au favoris');
+      res.send('Crop ajouté aux favoris');
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);
@@ -126,7 +124,7 @@ const cropController = {
         return res.status(401).json({ message: "Cet utilisateur n'existe pas !" });
       }
       await favoritecropDataMapper.deleteIntoFavoriteList(cropId, userid);
-      res.send('crop supprimé des favoris');
+      res.send('Crop supprimé des favoris');
     } catch (err) {
       console.error(err);
       res.status(500).send(err.message);

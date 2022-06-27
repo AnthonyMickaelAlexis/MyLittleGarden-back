@@ -33,7 +33,7 @@ const userController = {
       const validPassword = await bcrypt.compare(req.body.password, user.password);
 
       if (!validPassword) {
-        return res.status(401).json({ message: ' Mauvais mot de passe' });
+        return res.status(401).json({ message: 'Mauvais mot de passe' });
       }
 
       const token = jwt.sign({
