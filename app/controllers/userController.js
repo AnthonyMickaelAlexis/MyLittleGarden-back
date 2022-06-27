@@ -72,11 +72,24 @@ const userController = {
     // post register user
     async registerUserPost(req,res) {
         try {
+
+
+            const dataUser =
+            {
+                user_name : req.body.user_name,
+                firstname : req.body.firstname,
+                lastname : req.body.lastname, 
+                email : req.body.email, 
+                password : req.body.password,
+                confirm_password : req.body.confirm_password
+            };
+            
+            await schemaRegister.validateAsync(dataUser);
             // Password encryptation
             let salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password, salt);
             // Inserting data of the user from FORM
-            const dataUser =
+            const dataUserWithHashedPassword =
             {
                 user_name : req.body.user_name,
                 firstname : req.body.firstname,
@@ -99,9 +112,8 @@ const userController = {
 
             // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
 
-            await schemaRegister.validateAsync(dataUser);
 
-            await userDataMapper.insert(dataUser);
+            await userDataMapper.insert(dataUserWithHashedPassword);
             const userName = req.body.user_name;
             // Getting user Id
             const UserId = await userDataMapper.findByUserNameGetId(userName);
@@ -112,7 +124,7 @@ const userController = {
             // Use user Id and Parcel Id to create the entry on the linking table "user_has_crop"
             await userHasPlantDatamapper.insert(UserId, parcelId);
             
-            res.json(dataUser);
+            res.json(dataUserWithHashedPassword);
         } catch (err) {
             console.error(err);
             res.json({ error: err.details[0].message});
