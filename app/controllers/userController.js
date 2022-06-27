@@ -9,15 +9,6 @@ const { ApiError } = require('../helpers/errorHandler');
 
 const userController = {
 
-  // get login user
-  loginUser(req, res) {
-    try {
-      res.send('loginUserPost');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send(err.message);
-    }
-  },
   // test getting allusers
   async getAllUsers(_, res) {
     const users = await userDataMapper.findAll();
@@ -34,7 +25,7 @@ const userController = {
       }
 
       const validPassword = await bcrypt.compare(req.body.password, user.password);
-
+      console.log(validPassword);
       if (!validPassword) {
         throw new ApiError('Bad password', { statusCode: 404 });
       }
@@ -140,34 +131,36 @@ const userController = {
         throw new ApiError('This user does not exists', { statusCode: 404 });
       }
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      const dataUser = {
-        user_name: req.body.user_name,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        password: hashedPassword,
-      };
+      const oldPassword = await bcrypt.compare(req.body.oldpassword, user.password);
+      if (oldPassword === true) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+        const dataUser = {
+          user_name: req.body.user_name,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          email: req.body.email,
+          password: hashedPassword,
+        };
+        const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
 
-      const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
+        if (userByUsername) {
+          return res.status(401).json({ message: `${dataUser.user_name} existe deja !` });
+        }
 
-      if (userByUsername) {
-        return res.status(401).json({ message: `${dataUser.user_name} existe deja !` });
+        const userByEmail = await userDataMapper.findByEmail(dataUser.email);
+
+        if (userByEmail) {
+          return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
+        }
+
+        // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
+
+        await schemaRegister.validateAsync(dataUser);
+
+        const savedUser = await userDataMapper.update(req.params.userid, dataUser);
+        return res.json(savedUser);
       }
-
-      const userByEmail = await userDataMapper.findByEmail(dataUser.email);
-
-      if (userByEmail) {
-        return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
-      }
-
-      // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
-
-      await schemaRegister.validateAsync(dataUser);
-
-      const savedUser = await userDataMapper.update(req.params.userid, dataUser);
-      return res.json(savedUser);
     } catch (err) {
       console.error(err);
       res.json({ error: err.details[0].message });
