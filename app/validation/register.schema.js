@@ -1,6 +1,5 @@
 const Joi = require('joi');
 
-
 module.exports = Joi.object({
 
     user_name: Joi.string()
@@ -26,10 +25,5 @@ module.exports = Joi.object({
 
 
     confirm_password: Joi.ref('password')
-
-
-
-
-
 
 }).required();
