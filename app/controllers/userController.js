@@ -9,6 +9,16 @@ const { ApiError } = require('../helpers/errorHandler');
 
 const userController = {
 
+  // get login user
+  loginUser(req, res) {
+    try {
+      res.send('loginUserPost');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(err.message);
+    }
+  },
+
   // test getting allusers
   async getAllUsers(_, res) {
     const users = await userDataMapper.findAll();
