@@ -165,7 +165,6 @@ const cropController = {
             res.status(500).send(err.message);
         }
     }
-  },
 
   async AddOneCrop(req, res) {
     try {
