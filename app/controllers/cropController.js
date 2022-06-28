@@ -8,6 +8,7 @@ const { ApiError } = require('../helpers/errorHandler');
 const cropController = {
 
   async getAllCrops(_, res) {
+    // using datamapper to findall crop from BDD
     const crops = await cropDataMapper.findAll();
     return res.json(crops);
   },
@@ -18,8 +19,9 @@ const cropController = {
       if (Number.isNaN(cropId)) {
         return next();
       }
-
+      // using datamapper to find one crop from is id in bdd
       const crop = await cropDataMapper.findByPk(cropId);
+      // if crop not found throw an error
       if (!crop) {
         throw new ApiError('Crop not found', { statusCode: 404 });
       }
@@ -32,12 +34,13 @@ const cropController = {
 
   async AddOneCrop(req, res) {
     try {
+      // get info from form from front page
       const dataCrop = {
         name: req.body.name,
         crop_img: req.body.crop_img,
         description: req.body.description,
-
       };
+      // sending info from dataCrop to the datamapper to create a new crop in BDD
       await cropDataMapper.insert(dataCrop);
       res.json(dataCrop);
     } catch (err) {
@@ -52,11 +55,13 @@ const cropController = {
       if (Number.isNaN(cropId)) {
         return next();
       }
+      // using the id get in cropId variable to send it to the datamapper to return all information
+      // from one crop
       const crop = await cropDataMapper.findByPk(cropId);
       if (!crop) {
         throw new ApiError('This crop does not exists', { statusCode: 404 });
       }
-
+      // if the crop exist in bdd delete it
       await cropDataMapper.delete(cropId);
 
       return res.status(204).json();
