@@ -16,6 +16,7 @@ const userController = {
       res.status(500).send(err.message);
     }
   },
+
   // test getting allusers
   async getAllUsers(_, res) {
     const users = await userDataMapper.findAll();
