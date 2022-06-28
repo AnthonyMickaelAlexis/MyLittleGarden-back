@@ -31,7 +31,6 @@ module.exports = {
       values: [username],
     };
     const result = await client.query(preparedQuery);
-
     return result.rows[0];
   },
 

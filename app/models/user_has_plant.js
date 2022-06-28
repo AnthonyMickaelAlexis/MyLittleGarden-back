@@ -15,15 +15,15 @@ module.exports = {
                 VALUES ($1, $2, $3, $4);
             `,
       values: [
-        userId,
-        parcelId,
+        userId.id,
+        parcelId.id,
         -1,
         -1,
       ],
     };
 
     const result = await client.query(preparedQuery);
-
+    console.log(result.rows[0]);
     return result.rows[0];
   },
 
