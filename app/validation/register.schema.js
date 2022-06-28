@@ -26,21 +26,4 @@ module.exports = Joi.object({
 
     confirm_password: Joi.ref('password')
 
-  firstname: Joi.string()
-    .min(3)
-    .max(10),
-
-  lastname: Joi.string()
-    .min(3)
-    .max(10),
-
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'fr', 'io'] } }),
-
-  password: Joi.string()
-    // eslint-disable-next-line prefer-regex-literals
-    .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-
-  // repeat_password: Joi.ref('password')
-
 }).required();
