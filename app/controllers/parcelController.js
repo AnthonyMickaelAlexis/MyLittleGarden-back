@@ -4,7 +4,7 @@ const cropDataMapper = require("../models/crop");
 const userHasCropDataMapper = require("../models/user_has_plant");
 const favoriteCropDataMapper = require('../models/favorite_crop');
 
-const { ApiError} = require('../helpers/errorHandler');
+
 
 const parcelController = {
 
@@ -24,7 +24,7 @@ const parcelController = {
 
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
             
             const userHasCrop = await parcelDatamapper.findAllCropsInParcel(userId);
@@ -118,7 +118,7 @@ const parcelController = {
             }
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                throw new ApiError('This crop does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This crop does not exists'});
             }
             
             const userid = parseInt(req.params.userid, 10);
@@ -127,12 +127,12 @@ const parcelController = {
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             const parcel = await parcelDatamapper.findParcelByUserId(userid);
             if (!parcel) {
-                throw new ApiError('This parcel does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This parcel does not exists'});
             }
 
             const dataCrop =
@@ -147,7 +147,8 @@ const parcelController = {
             const filledBox = await userHasCropDataMapper.findPositionInParcel(dataCrop);
 
             if (filledBox) {
-                throw new ApiError('This position is taken', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This position is taken'});
             }
             
             // insertIntoParcel
@@ -170,7 +171,8 @@ const parcelController = {
             }
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                throw new ApiError('This crop does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This crop does not exists'});
             }
             
             const userid = parseInt(req.params.userid, 10);
@@ -179,12 +181,14 @@ const parcelController = {
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             const parcel = await parcelDatamapper.findParcelByUserId(userid);
             if (!parcel) {
-                throw new ApiError('This parcel does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This parcel does not exists'});
             }
 
             const dataCrop =

@@ -2,7 +2,6 @@ const cropDataMapper = require('../models/crop');
 const favoritecropDataMapper = require('../models/favorite_crop');
 const userDataMapper = require('../models/user');
 
-const { ApiError} = require('../helpers/errorHandler');
 
 const cropController = {
 
@@ -21,7 +20,7 @@ const cropController = {
 
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                throw new ApiError('Crop not found', { statusCode: 404 });
+                return res.status(401).json({message:'This crop does not exists'});
             }
             return res.json(crop);
         } catch (err) {
@@ -64,7 +63,7 @@ const cropController = {
             }
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                throw new ApiError('This crop does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This crop does not exists'});
             }
 
             await cropDataMapper.delete(cropId);
@@ -85,7 +84,8 @@ const cropController = {
 
             const crop = await cropDataMapper.findByPk(cropId);
             if (!crop) {
-                throw new ApiError('This crop does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This crop does not exists'});
             }
             
             const userid = parseInt(req.params.userid, 10);
@@ -95,7 +95,7 @@ const cropController = {
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
             const checkIfCropExist = await favoritecropDataMapper.checkIfFavoriteCropExist(cropId,userid);
             console.log(checkIfCropExist);
@@ -127,7 +127,7 @@ const cropController = {
 
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             const favoriteList = await favoritecropDataMapper.findAllCropsFavorite(userId);
@@ -153,7 +153,7 @@ const cropController = {
             }
             const user = await userDataMapper.findByPK(userid);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             await favoritecropDataMapper.deleteIntoFavoriteList(cropId,userid);
