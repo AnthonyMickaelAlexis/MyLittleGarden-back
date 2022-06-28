@@ -175,16 +175,20 @@ const userController = {
         password: hashedPassword,
       };
 
-      const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
+      if (user.user_name !== dataUser.user_name) {
+        const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
 
-      if (userByUsername) {
-        return res.status(401).json({ message: `This username ${dataUser.user_name} already exists` });
+        if (userByUsername) {
+          return res.status(401).json({ message: `This username ${dataUser.user_name} already exists` });
+        }
       }
 
-      const userByEmail = await userDataMapper.findByEmail(dataUser.email);
+      if (user.email !== dataUser.email) {
+        const userByEmail = await userDataMapper.findByEmail(dataUser.email);
 
-      if (userByEmail) {
-        return res.status(401).json({ message: `An account with this email ${dataUser.email} already exists` });
+        if (userByEmail) {
+          return res.status(401).json({ message: `An account with this email ${dataUser.email} already exists` });
+        }
       }
 
       // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
