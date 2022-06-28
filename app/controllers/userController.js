@@ -34,13 +34,15 @@ const userController = {
            const user = await userDataMapper.findByUserName(req.body.user_name);
 
            if (!user) {
-            throw new ApiError(`This account does not exist`, { statusCode: 404 });
+            
+            return res.status(401).json({message:`This account does not exist`});
            };
           
            const validPassword = await bcrypt.compare(req.body.password, user.password);
            
            if (!validPassword) {
-            throw new ApiError(`Bad password`, { statusCode: 404 });
+            return res.status(401).json({message:`Bad password`})
+            
         };
 
         const token = jwt.sign({
@@ -101,13 +103,15 @@ const userController = {
             const userByUsername = await userDataMapper.findByUserName(dataUser.user_name)
 
             if (userByUsername) {
-                throw new ApiError(`This username ${dataUser.user_name} already exists`, { statusCode: 404 });
+                return res.status(401).json({message:`This username ${dataUser.user_name} already exists`})
+                
             };
 
             const userByEmail = await userDataMapper.findByEmail(dataUser.email)
 
             if(userByEmail) {
-                throw new ApiError(`An account with this email ${dataUser.email} already exists`, { statusCode: 404 });
+                
+                return res.status(401).json({message:`An account with this email ${dataUser.email} already exists`})
             }
 
             // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
@@ -127,7 +131,7 @@ const userController = {
             res.json(dataUserWithHashedPassword);
         } catch (err) {
             console.error(err);
-            res.json({ error: err.details[0].message});
+            
         }
     },
 
@@ -141,7 +145,8 @@ const userController = {
 
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This user does not exists'})
             }
             res.json(user);
         } catch (err) {
@@ -156,7 +161,8 @@ const userController = {
 
             const user = await userDataMapper.findByPK(req.params.userid);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             let salt = await bcrypt.genSalt(10);
@@ -207,7 +213,7 @@ const userController = {
             }
             const user = await userDataMapper.findByPK(userId);
             if (!user) {
-                throw new ApiError('This user does not exists', { statusCode: 404 });
+                return res.status(401).json({message:'This user does not exists'});
             }
 
             await userDataMapper.deleteDataForUserInTableUserHasCrop(userId);
