@@ -72,6 +72,7 @@ const userController = {
         lastname: req.body.lastname,
         email: req.body.email,
         password: req.body.password,
+        confirm_password: req.body.confirm_password,
       };
 
       await schemaRegister.validateAsync(dataUser);
@@ -146,9 +147,27 @@ const userController = {
         return res.status(401).json({ message: 'This user does not exists' });
       }
 
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
       const dataUser = {
+        user_name: req.body.user_name,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: req.body.password,
+        new_password: req.body.new_password,
+      };
+
+      await schemaRegister.validateAsync(dataUser);
+
+      const validPassword = await bcrypt.compare(req.body.password, user.password);
+
+      if (!validPassword) {
+        return res.status(401).json({ message: 'Bad password' });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.new_password, salt);
+
+      const dataUserWithHashedPassword = {
         user_name: req.body.user_name,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -159,20 +178,18 @@ const userController = {
       const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
 
       if (userByUsername) {
-        return res.status(401).json({ message: `${dataUser.user_name} existe deja !` });
+        return res.status(401).json({ message: `This username ${dataUser.user_name} already exists` });
       }
 
       const userByEmail = await userDataMapper.findByEmail(dataUser.email);
 
       if (userByEmail) {
-        return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
+        return res.status(401).json({ message: `An account with this email ${dataUser.email} already exists` });
       }
 
       // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
 
-      await schemaRegister.validateAsync(dataUser);
-
-      const savedUser = await userDataMapper.update(req.params.userid, dataUser);
+      const savedUser = await userDataMapper.update(req.params.userid, dataUserWithHashedPassword);
       return res.json(savedUser);
     } catch (err) {
       console.error(err);

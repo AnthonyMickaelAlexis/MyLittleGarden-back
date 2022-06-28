@@ -34,25 +34,26 @@ module.exports = {
   },
 
   async createParcel(userName) {
-    const parcelName = `${userName} parcel`;
+    // eslint-disable-next-line no-useless-concat
+    const parcelName = `${userName} ` + 'Parcel';
     const preparedQuery = {
       text: `
-                INSERT INTO "parcel"
-                (
-                    "name",
-                    "width",
-                    "height"
-                )
-                VALUES ($1, $2, $3);
-            `,
+            INSERT INTO "parcel"
+            (
+                "name",
+                "width",
+                "height"
+            )
+            VALUES ($1, $2, $3);
+        `,
       values: [
         parcelName,
         8,
         5,
       ],
     };
-    const result = await client.query(preparedQuery);
-    return result.rows[0];
+    await client.query(preparedQuery);
+    return parcelName;
   },
 
   async getParcelId(parcelName) {

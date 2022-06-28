@@ -12,7 +12,7 @@ const parcelController = require('../controllers/parcelController');
 const cropController = require('../controllers/cropController');
 
 router.get('/home', mainController.homePage);
-// router.get('/profil/users', userController.getAllUsers);
+router.get('/profil/users', userController.getAllUsers);
 // connexion page
 router.post('/login', userController.loginUserConnection);
 
