@@ -15,8 +15,8 @@ module.exports = {
                 VALUES ($1, $2, $3, $4);
             `,
       values: [
-        userId.id,
-        parcelId.id,
+        userId,
+        parcelId,
         -1,
         -1,
       ],
