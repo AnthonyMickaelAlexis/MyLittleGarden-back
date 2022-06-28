@@ -72,7 +72,6 @@ const userController = {
         lastname: req.body.lastname,
         email: req.body.email,
         password: req.body.password,
-        confirm_password: req.body.confirm_password,
       };
 
       await schemaRegister.validateAsync(dataUser);
@@ -81,10 +80,10 @@ const userController = {
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
       // Inserting data of the user from FORM
       const dataUserWithHashedPassword = {
-        user_name: req.body.user_name,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
+        user_name: dataUser.user_name,
+        firstname: dataUser.firstname,
+        lastname: dataUser.lastname,
+        email: dataUser.email,
         password: hashedPassword,
       };
 

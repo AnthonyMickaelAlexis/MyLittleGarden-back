@@ -22,6 +22,6 @@ module.exports = Joi.object({
     // eslint-disable-next-line prefer-regex-literals
     .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
 
-  confirm_password: Joi.ref('password'),
+  // confirm_password: Joi.ref('password'),
 
 }).required();
