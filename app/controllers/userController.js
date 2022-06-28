@@ -47,6 +47,7 @@ const userController = {
         if (userByUsername) {
           return res.status(401).json({ message: `${dataUser.user_name} existe deja !` });
         }
+        }
     },
 
     // get register user
@@ -175,6 +176,8 @@ const userController = {
         if (userByEmail) {
           return res.status(401).json({ message: `Un Compte avec cet email : ${dataUser.email} est deja crée ` });
         }
+      }
+    },
 
     // delete user from database
     async deleteUser(req, res, next) {
@@ -193,7 +196,7 @@ const userController = {
 
         const savedUser = await userDataMapper.update(req.params.userid, dataUser);
         return res.json(savedUser);
-      }
+      
     } catch (err) {
       console.error(err);
       res.json({ error: err.details[0].message });
