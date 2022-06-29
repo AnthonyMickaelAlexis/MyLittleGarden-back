@@ -54,6 +54,7 @@ module.exports = {
       ],
     };
     await client.query(preparedQuery);
+    // return parcelName to get Id of the parcel don't touch
     return parcelName;
   },
 
