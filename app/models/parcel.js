@@ -34,7 +34,8 @@ module.exports = {
   },
 
   async createParcel(userName) {
-    const parcelName = `${userName} parcel`;
+    // eslint-disable-next-line no-useless-concat
+    const parcelName = `${userName} ` + 'Parcel';
     const preparedQuery = {
       text: `
             INSERT INTO "parcel"
