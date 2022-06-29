@@ -157,7 +157,6 @@ const userController = {
       };
 
       await schemaRegister.validateAsync(dataUser);
-
       const validPassword = await bcrypt.compare(req.body.password, user.password);
 
       if (!validPassword) {
