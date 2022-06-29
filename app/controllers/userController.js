@@ -94,30 +94,31 @@ const userController = {
         email: dataUser.email,
         password: hashedPassword,
       };
-
+      // on cherche en BDD via le "user_name" de l'utilisateur
+      // si il existe déjà (identificant unique)
       const userByUsername = await userDataMapper.findByUserName(dataUser.user_name);
 
       if (userByUsername) {
         return res.status(401).json({ message: `This username ${dataUser.user_name} already exists` });
       }
-
+      // on cherche en BDD via l'adresse "email" de l'utilisateur via son adresse mail si un compte
+      // a déjà été créé avec ce mail
       const userByEmail = await userDataMapper.findByEmail(dataUser.email);
 
       if (userByEmail) {
         return res.status(401).json({ message: `An account with this email ${dataUser.email} already exists` });
       }
-
-      // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
-
+      // on stocke le nouvel utilisateur avec son password hashé
       await userDataMapper.insert(dataUserWithHashedPassword);
       const userName = req.body.user_name;
-      // Getting user Id
+      // on cherche l'id de l'utilisateur via son "user_name"
       const UserId = await userDataMapper.findByUserNameGetId(userName);
-      // Creating user Parcel
+      // on lui créé une parcelle
       const createParcel = await parcelDatamapper.createParcel(userName);
-      // Gettting parcel Id
+      // on récupére l'"id" de la parcelle créée
       const parcelId = await parcelDatamapper.getParcelId(createParcel);
-      // Use user Id and Parcel Id to create the entry on the linking table "user_has_crop"
+      // On insére dans la table liée "user_has_crop" l'id de l'utilisateur
+      // et l'id de sa parcelle pour les lier
       await userHasPlantDatamapper.insert(UserId, parcelId);
 
       res.json(dataUserWithHashedPassword);
@@ -127,7 +128,7 @@ const userController = {
     }
   },
 
-  // get user profil
+  // méthode pour récupérer les données de l'utilisateur pour les afficher sur sa page de profil
   async getUserProfil(req, res, next) {
     try {
       const userId = parseInt(req.params.user, 10);
@@ -139,6 +140,7 @@ const userController = {
       if (!user) {
         return res.status(401).json({ message: 'This user does not exists' });
       }
+      // on renvoie les infos de l'utilisateur au front
       res.json(user);
     } catch (err) {
       console.error(err);
@@ -146,7 +148,7 @@ const userController = {
     }
   },
 
-  // patch user profil
+  // méthode pour mettre à jour le profil de l'utilisateur
   async patchUserProfil(req, res) {
     try {
       const user = await userDataMapper.findByPK(req.params.userid);
@@ -197,8 +199,8 @@ const userController = {
         }
       }
 
-      // On verifie les données envoyés par l'utilisateur pas besoin de les stockers
-
+      // on envoie les nouvelles infos de l'utilisateur pour mettre à jour
+      // la table "user" dans la BDD
       const savedUser = await userDataMapper.update(req.params.userid, dataUserWithHashedPassword);
       return res.json(savedUser);
     } catch (err) {
@@ -207,7 +209,7 @@ const userController = {
     }
   },
 
-  // delete user from database
+  // méthode pour supprimer un utilisateur de la BDD
   async deleteUser(req, res, next) {
     try {
       const userId = parseInt(req.params.user, 10);
@@ -218,9 +220,11 @@ const userController = {
       if (!user) {
         return res.status(401).json({ message: 'This user does not exists' });
       }
-
+      // on supprime les infos sur "user_has_crop"
       await userDataMapper.deleteDataForUserInTableUserHasCrop(userId);
+      // on supprime les infos sur "favorite_crop"
       await userDataMapper.deleteDataForUserInTableFavoriteCrop(userId);
+      // on supprime les infos sur "user"
       await userDataMapper.delete(userId);
       return res.status(204).json();
     } catch (err) {
@@ -229,6 +233,7 @@ const userController = {
     }
   },
 
+  // méthode pas encore implémenté
   forgotPassword(req, res) {
     try {
       console.log('test');
