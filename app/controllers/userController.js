@@ -1,14 +1,19 @@
 /* eslint-disable consistent-return */
+// on récupére bcrypt pour encrypter les mots de passe
 const bcrypt = require('bcrypt');
+// on récupére le module jsonwebtoken pour générer un token à chaque connexion et lui
+// donner une durée de vie pour sécuriser la transmission d'infos entre back et front et
+// bloquer certaines routes si le token est invalide
 const jwt = require('jsonwebtoken');
 const userDataMapper = require('../models/user');
 const parcelDatamapper = require('../models/parcel');
 const userHasPlantDatamapper = require('../models/user_has_plant');
+// on récupére le schéma de joi pour la validation des infos transmis par l'utilisateur
 const schemaRegister = require('../validation/register.schema');
 
 const userController = {
 
-  // get login user
+  // méthode inutilisé
   loginUser(req, res) {
     try {
       res.send('loginUserPost');
@@ -17,27 +22,28 @@ const userController = {
       res.status(500).send(err.message);
     }
   },
-  // test getting allusers
+  // méthode utilisé à des fins de tests pour récupérer l'intégralité des utilisateurs du site
   async getAllUsers(_, res) {
     const users = await userDataMapper.findAll();
     return res.json(users);
   },
 
-  // post login user
+  // méthode pour connecter un utilisateur enregistré au site
   async loginUserConnection(req, res) {
     try {
+      // on cherche les infos de l'utilisateur via son nom dans la bdd
       const user = await userDataMapper.findByUserName(req.body.user_name);
 
       if (!user) {
         return res.status(401).json({ message: 'This account does not exist' });
       }
-
+      // on compare le mot de passe qu'il a entré avec le mot de passe en BDD
       const validPassword = await bcrypt.compare(req.body.password, user.password);
 
       if (!validPassword) {
         return res.status(401).json({ message: 'Bad password' });
       }
-
+      // on créé un token avec jwt et avec les infos de l'utilisateur connecté
       const token = jwt.sign({
         id: user.id,
         user_name: user.user_name,
@@ -45,7 +51,7 @@ const userController = {
         lastname: user.lastname,
         email: user.email,
       }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING });
-
+      // on envoie le token au front-end
       res.json({ access_token: token });
     } catch (err) {
       console.error(err);
@@ -53,7 +59,7 @@ const userController = {
     }
   },
 
-  // get register user
+  // méthode inutilisé
   async registeredUser(req, res) {
     try {
       res.send('loginUserPost');
@@ -63,9 +69,10 @@ const userController = {
     }
   },
 
-  // post register user
+  // méthode pour enregistrer un utilisateur en bdd
   async registerUserPost(req, res) {
     try {
+      // on récupére dans un objet les infos envoyés par le front
       const dataUser = {
         user_name: req.body.user_name,
         firstname: req.body.firstname,
@@ -74,12 +81,12 @@ const userController = {
         password: req.body.password,
         confirm_password: req.body.confirm_password,
       };
-
+      // méthode pour check si les informations sont valides d'après la configuration de joi
       await schemaRegister.validateAsync(dataUser);
-      // Password encryptation
+      // On hash le password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      // Inserting data of the user from FORM
+      // On insére les donnéees de l'utilisateur depuis les formulaires
       const dataUserWithHashedPassword = {
         user_name: dataUser.user_name,
         firstname: dataUser.firstname,
@@ -196,7 +203,7 @@ const userController = {
       return res.json(savedUser);
     } catch (err) {
       console.error(err);
-      res.json({ error: err.details[0].message });
+      res.status(500).send(err.message);
     }
   },
 
