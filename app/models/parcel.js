@@ -1,7 +1,8 @@
 const client = require('../config/db');
 
 module.exports = {
-
+  // méthode pour trouver toutes les parcelles en BDD non utlisé pour
+  // le moment pour l'administration plus tard
   async findAllParcels() {
     const result = await client.query(
       `SELECT "user".user_name, parcel.*
@@ -11,7 +12,7 @@ module.exports = {
     );
     return result.rows;
   },
-
+  // méthode pour trouver la parcelle de l'utilisateur via son id
   async findParcelByUserId(userId) {
     const result = await client.query(`SELECT parcel.*
              FROM user_has_crop 
@@ -20,19 +21,19 @@ module.exports = {
              WHERE "user"."id" = $1`, [userId]);
     return result.rows[0];
   },
-
+  // méthode inutilisé servant à des fins de tests
   async findByPk(parcelId) {
     const result = await client.query('SELECT * FROM "user" WHERE id = $1', [parcelId]);
 
     return result.rows[0];
   },
-
+  // méthode pour retourner les infos de la parcelle de l'utilisateur
   async getUserParcel(parcelId) {
     const result = await client.query('SELECT * FROM "parcel" WHERE id = $1', [parcelId]);
 
     return result.rows[0];
   },
-
+  // méthode pour créer une parcelle à l'utilisateur utilisé à la création de l'utilisateur
   async createParcel(userName) {
     // eslint-disable-next-line no-useless-concat
     const parcelName = `${userName} ` + 'Parcel';
@@ -48,6 +49,7 @@ module.exports = {
         `,
       values: [
         parcelName,
+        // on défini la hauteur et la largueur de la parcelle affiché en front
         8,
         5,
       ],
