@@ -5,7 +5,6 @@ const parcelDatamapper = require('../models/parcel');
 const userDataMapper = require('../models/user');
 const cropDataMapper = require('../models/crop');
 const userHasCropDataMapper = require('../models/user_has_plant');
-const favoriteCropDataMapper = require('../models/favorite_crop');
 
 const parcelController = {
 
@@ -29,6 +28,7 @@ const parcelController = {
       }
 
       const userHasCrop = await parcelDatamapper.findAllCropsInParcel(userId);
+      console.log(userHasCrop);
 
       res.json(userHasCrop);
     } catch (err) {
@@ -65,8 +65,6 @@ const parcelController = {
   async deleteParcel(req, res) {
     try {
       const userId = Number(req.params.user, 10);
-      const userHasCrop = await userHasCropDataMapper.findByPk(userId);
-      const deleteCropsFromParcel = await userHasCropDataMapper.delete(userId);
       console.log('All crops from parcel have been removed');
       res.send('deleteParcel');
     } catch (err) {

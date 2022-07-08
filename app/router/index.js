@@ -40,7 +40,7 @@ router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 // parcel page (main page when the user is connected) read, modify parcel name
 // and delete all crops from the parcel
 // router.get('/parcels',parcelController.getAllParcels)
-router.get('/profil/:user/parcel', checkTokenMiddleware, parcelController.getUserParcel);
+router.get('/profil/:user/parcel', parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel', checkTokenMiddleware, parcelController.AddCropInParcel);
 router.delete('/:userid/:cropid/parcel', checkTokenMiddleware, parcelController.DeleteCropInParcel);
 router.patch('/profil/:user/parcel', checkTokenMiddleware, parcelController.patchUserParcel);

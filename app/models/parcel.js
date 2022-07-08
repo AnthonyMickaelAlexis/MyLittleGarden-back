@@ -97,7 +97,7 @@ module.exports = {
   },
 
   async findAllCropsInParcel(userId) {
-    const result = await client.query(`SELECT "parcel".name,  crop.*, position_x, position_y
+    const result = await client.query(`SELECT parcel.name, crop.*, position_x, position_y, parcel_id
              FROM user_has_crop 
              JOIN "parcel" ON "user_has_crop".parcel_id = "parcel".id
              JOIN "crop" ON "user_has_crop".crop_id = "crop".id
