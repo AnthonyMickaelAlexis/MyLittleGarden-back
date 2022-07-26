@@ -114,7 +114,7 @@ const userController = {
       // on cherche l'id de l'utilisateur via son "user_name"
       const UserId = await userDataMapper.findByUserNameGetId(userName);
       // on lui créé une parcelle
-      const createParcel = await parcelDatamapper.createParcel(userName);
+      const createParcel = await parcelDatamapper.createParcel(userName, UserId);
       // on récupére l'"id" de la parcelle créée
       const parcelId = await parcelDatamapper.getParcelId(createParcel);
       // On insére dans la table liée "user_has_crop" l'id de l'utilisateur

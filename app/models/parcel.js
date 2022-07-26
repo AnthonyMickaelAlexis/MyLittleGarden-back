@@ -34,20 +34,22 @@ module.exports = {
     return result.rows[0];
   },
   // méthode pour créer une parcelle à l'utilisateur utilisé à la création de l'utilisateur
-  async createParcel(userName) {
+  async createParcel(userName, UserId) {
     // eslint-disable-next-line no-useless-concat
     const parcelName = `${userName} ` + 'Parcel';
     const preparedQuery = {
       text: `
             INSERT INTO "parcel"
             (
+                "id",
                 "name",
                 "width",
                 "height"
             )
-            VALUES ($1, $2, $3);
+            VALUES ($1, $2, $3, $4);
         `,
       values: [
+        UserId.id,
         parcelName,
         // on défini la hauteur et la largueur de la parcelle affiché en front
         8,

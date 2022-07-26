@@ -65,6 +65,8 @@ const parcelController = {
   async deleteParcel(req, res) {
     try {
       const userId = Number(req.params.user, 10);
+      const userHasCrop = await userHasCropDataMapper.findByPk(userId);
+      const deleteCropsFromParcel = await userHasCropDataMapper.delete(userId);
       console.log('All crops from parcel have been removed');
       res.send('deleteParcel');
     } catch (err) {
