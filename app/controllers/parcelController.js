@@ -43,7 +43,7 @@ const parcelController = {
       const userHasCrops = req.body;
       console.log(userHasCrops);
       // console.log(JSON.stringify(obj1) === JSON.stringify(obj2))
-      for (crop of userHasCrops) {
+      for (const crop of userHasCrops) {
         const userHasCropsReadingDB = await userHasCropDataMapper.findByInfo(crop);
         console.log('userhascropsreadingdb', JSON.stringify(userHasCropsReadingDB));
         console.log('crop', JSON.stringify(crop));
@@ -51,7 +51,7 @@ const parcelController = {
           console.log('déjà présent en bdd');
         } else {
           // const userHasCropTable = await userHasCropDataMapper.update(crop);
-          const userHasCropInsert = await userHasCropDataMapper.insertSavedParcel(crop);
+          await userHasCropDataMapper.insertSavedParcel(crop);
         }
       }
       res.send('Parcel bien sauvegardé');
@@ -65,8 +65,8 @@ const parcelController = {
   async deleteParcel(req, res) {
     try {
       const userId = Number(req.params.user, 10);
-      const userHasCrop = await userHasCropDataMapper.findByPk(userId);
-      const deleteCropsFromParcel = await userHasCropDataMapper.delete(userId);
+      await userHasCropDataMapper.findByPk(userId);
+      await userHasCropDataMapper.delete(userId);
       console.log('All crops from parcel have been removed');
       res.send('deleteParcel');
     } catch (err) {

@@ -39,13 +39,8 @@ router.delete('/profil/:user', checkTokenMiddleware, userController.deleteUser);
 router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 // parcel page (main page when the user is connected) read, modify parcel name
 // and delete all crops from the parcel
-<<<<<<< HEAD
-// router.get('/parcels',parcelController.getAllParcels)
-router.get('/profil/:user/parcel', parcelController.getUserParcel);
-=======
 router.get('/parcels', checkTokenMiddleware, parcelController.getAllParcels);
 router.get('/profil/:user/parcel', checkTokenMiddleware, parcelController.getUserParcel);
->>>>>>> 463aa557226eba4fdb6d3ad88675bc6956d6749f
 router.post('/:cropid/:userid/parcel', checkTokenMiddleware, parcelController.AddCropInParcel);
 router.delete('/:userid/:cropid/parcel', checkTokenMiddleware, parcelController.DeleteCropInParcel);
 router.patch('/profil/:user/parcel', checkTokenMiddleware, parcelController.patchUserParcel);
