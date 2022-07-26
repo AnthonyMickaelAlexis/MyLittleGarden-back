@@ -12,7 +12,7 @@ const parcelController = require('../controllers/parcelController');
 const cropController = require('../controllers/cropController');
 
 router.get('/home', mainController.homePage);
-router.get('/profil/users', userController.getAllUsers);
+router.get('/profil/users', checkTokenMiddleware, userController.getAllUsers);
 // connexion page
 router.post('/login', userController.loginUserConnection);
 
@@ -39,7 +39,7 @@ router.delete('/profil/:user', checkTokenMiddleware, userController.deleteUser);
 router.post('/home/profil/:user/forgotpassword', userController.forgotPassword);
 // parcel page (main page when the user is connected) read, modify parcel name
 // and delete all crops from the parcel
-// router.get('/parcels',parcelController.getAllParcels)
+router.get('/parcels', checkTokenMiddleware, parcelController.getAllParcels);
 router.get('/profil/:user/parcel', checkTokenMiddleware, parcelController.getUserParcel);
 router.post('/:cropid/:userid/parcel', checkTokenMiddleware, parcelController.AddCropInParcel);
 router.delete('/:userid/:cropid/parcel', checkTokenMiddleware, parcelController.DeleteCropInParcel);
