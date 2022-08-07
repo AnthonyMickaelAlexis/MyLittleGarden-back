@@ -130,6 +130,11 @@ const cropController = {
       }
       // On cherche et retourne la liste complête de ses plants
       const favoriteList = await favoritecropDataMapper.findAllCropsFavorite(userId);
+      favoriteList.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
       res.json(favoriteList);
     } catch (err) {
       console.error(err);

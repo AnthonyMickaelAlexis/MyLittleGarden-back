@@ -1,5 +1,5 @@
 // Non fonctionnel pour le moment
-
+const nodemailer = {
 const transporter = nodemailer.createTransport(smtpTransport({
   host: 'outmail.abc.co.th', // hostname
   secure: false, // use SSL
@@ -21,7 +21,7 @@ const mailOptions = {
   html: '<b>Hello world </b>', // html body
 };
 
-transporter.sendMail(mailOptions, (error, info) => {
+transporter.sendMail(mailOptions, (error, info, ...res) => {
   if (error) {
     console.log('/sendmail error');
     console.log(error);
@@ -37,5 +37,5 @@ transporter.sendMail(mailOptions, (error, info) => {
   // if you don't want to use this transport object anymore, uncomment following line
   transporter.close(); // shut down the connection pool, no more messages
 });
-
+};
 module.exports = nodemailer;

@@ -11,7 +11,7 @@ const extractBearer = (authorization) => {
   // on isole le token
 
   const matches = authorization.match(/(bearer)\s+(\S+)/i);
-
+  // matches[2] si matches n'est pas null ou undefined va retourner le token (\S+)
   return matches && matches[2];
 };
 
