@@ -20,8 +20,6 @@ module.exports = Joi.object({
 
   password: Joi.string()
     // eslint-disable-next-line prefer-regex-literals
-    .min('')
-    .max(21)
     .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
 
   confirm_password: Joi.ref('password'),
